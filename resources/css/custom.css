@@ -1,0 +1,215 @@
+/* Animações customizadas e melhorias de UX */
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Animações de entrada para cards */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* Hover effects melhorados */
+.hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(242, 199, 0, 0.2);
+}
+
+/* Loading skeleton */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        #1e1e1e 0%,
+        #2a2a2a 50%,
+        #1e1e1e 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* Melhorias em inputs */
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #f2c700;
+}
+
+/* Transições suaves em todos os elementos interativos */
+button,
+a,
+input,
+select,
+textarea {
+    transition: all 0.3s ease;
+}
+
+/* Melhorias em tabelas */
+table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+table tbody tr:hover {
+    background-color: rgba(30, 30, 30, 0.5);
+}
+
+/* Scrollbar customizada */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #171717;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1e1e1e;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #f2c700;
+}
+
+/* Melhorias em modais */
+.modal-backdrop {
+    backdrop-filter: blur(4px);
+}
+
+/* Estados de loading */
+.loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* Tooltip customizado */
+.tooltip {
+    position: relative;
+}
+
+.tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 12px;
+    background: #1e1e1e;
+    color: white;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-bottom: 8px;
+    border: 1px solid #f2c700;
+}
+
+/* Melhorias em cards */
+.card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(242, 199, 0, 0.15);
+}
+
+/* Animações de entrada escalonadas */
+.stagger-animation {
+    animation: fadeInUp 0.5s ease-out;
+    animation-fill-mode: both;
+}
+
+.stagger-animation:nth-child(1) { animation-delay: 0.1s; }
+.stagger-animation:nth-child(2) { animation-delay: 0.2s; }
+.stagger-animation:nth-child(3) { animation-delay: 0.3s; }
+.stagger-animation:nth-child(4) { animation-delay: 0.4s; }
+.stagger-animation:nth-child(5) { animation-delay: 0.5s; }
+
+/* Melhorias em botões */
+.btn-primary {
+    background: linear-gradient(135deg, #f2c700 0%, #d9b300 100%);
+    box-shadow: 0 4px 15px rgba(242, 199, 0, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #d9b300 0%, #f2c700 100%);
+    box-shadow: 0 6px 20px rgba(242, 199, 0, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Estados de foco melhorados */
+*:focus-visible {
+    outline: 2px solid #f2c700;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Melhorias em formulários */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-error {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+/* Responsividade melhorada */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animações de sucesso */
+@keyframes successPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.success-animation {
+    animation: successPulse 0.6s ease-in-out;
+}

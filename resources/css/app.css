@@ -1,0 +1,20 @@
+@import 'tailwindcss';
+@import './custom.css';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    /* Fonte customizada */
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    
+    /* Cores customizadas do projeto */
+    --color-primary: #f2c700;
+    --color-bg-primary: #171717;
+    --color-bg-secondary: #1e1e1e;
+    --color-text-muted: #7e7e7e;
+    --color-text-light: #ffffff;
+}
