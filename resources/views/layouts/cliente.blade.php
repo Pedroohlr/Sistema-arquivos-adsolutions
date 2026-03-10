@@ -21,7 +21,7 @@
             <div class="flex flex-col flex-grow bg-[#1e1e1e] border-r border-gray-800">
                 <!-- Logo -->
                 <div class="flex items-center justify-center h-20 px-4 border-b border-gray-800">
-                    <img src="{{ asset('storage/logo-ads.webp') }}" alt="Logo" class="h-16 w-auto object-contain">
+                    <img src="{{ asset('images/logo.webp') }}" alt="Logo" class="h-16 w-auto object-contain">
                 </div>
                 
                 <!-- Navigation -->
@@ -72,7 +72,7 @@
             <div class="px-4 sm:px-6">
                 <div class="flex h-16 items-center justify-between">
                     <div class="flex items-center">
-                        <img src="{{ asset('storage/logo-ads.webp') }}" alt="Logo" class="h-12 w-auto object-contain">
+                        <img src="{{ asset('images/logo.webp') }}" alt="Logo" class="h-12 w-auto object-contain">
                     </div>
                     <div class="flex items-center gap-4">
                         <a href="{{ route('cliente.dashboard') }}" 

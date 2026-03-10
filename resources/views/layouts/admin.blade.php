@@ -21,7 +21,7 @@
             <div class="flex flex-col flex-grow bg-[#1e1e1e] border-r border-gray-800">
                 <!-- Logo -->
                 <div class="flex items-center justify-center h-20 px-4 border-b border-gray-800">
-                    <img src="{{ asset('storage/logo-ads.webp') }}" alt="Logo" class="h-16 w-auto object-contain">
+                    <img src="{{ asset('images/logo.webp') }}" alt="Logo" class="h-16 w-auto object-contain">
                 </div>
                 
                 <!-- Navigation -->
@@ -82,7 +82,7 @@
             <div class="px-4 sm:px-6">
                 <div class="flex h-16 items-center justify-between">
                     <div class="flex items-center">
-                        <img src="{{ asset('storage/logo-ads.webp') }}" alt="Logo" class="h-12 w-auto object-contain">
+                        <img src="{{ asset('images/logo.webp') }}" alt="Logo" class="h-12 w-auto object-contain">
                         <button onclick="toggleMobileMenu()" 
                                 class="ml-4 p-2 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,7 +133,7 @@
     <div id="mobileMenu" class="hidden lg:hidden fixed inset-0 z-50 bg-black bg-opacity-75" onclick="toggleMobileMenu()">
         <div class="bg-[#1e1e1e] w-64 h-full shadow-xl" onclick="event.stopPropagation()">
             <div class="p-4 border-b border-gray-800 flex items-center justify-between">
-                <img src="{{ asset('storage/logo-ads.webp') }}" alt="Logo" class="h-12 w-auto object-contain">
+                <img src="{{ asset('images/logo.webp') }}" alt="Logo" class="h-12 w-auto object-contain">
                 <button onclick="toggleMobileMenu()" class="text-gray-400 hover:text-white">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>

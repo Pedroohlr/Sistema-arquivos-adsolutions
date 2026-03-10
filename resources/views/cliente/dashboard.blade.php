@@ -6,7 +6,7 @@
 <div class="space-y-6">
     <!-- Logo no topo (apenas mobile) -->
     <div class="lg:hidden flex justify-center mb-4">
-        <img src="{{ asset('storage/logo-ads.webp') }}" alt="Logo" class="h-20 w-auto object-contain">
+        <img src="{{ asset('images/logo.webp') }}" alt="Logo" class="h-20 w-auto object-contain">
     </div>
     
     <!-- Boas-vindas -->
