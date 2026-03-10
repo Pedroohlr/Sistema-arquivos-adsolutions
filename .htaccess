@@ -1,0 +1,8 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /usuarios/
+
+    # Redireciona tudo para a pasta public/ do Laravel
+    RewriteCond %{REQUEST_URI} !^/usuarios/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
