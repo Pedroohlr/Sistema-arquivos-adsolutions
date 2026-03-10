@@ -1,8 +1,13 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteBase /usuarios/
+Options -Indexes
+RewriteEngine On
+RewriteBase /usuarios/
 
-    # Redireciona tudo para a pasta public/ do Laravel
-    RewriteCond %{REQUEST_URI} !^/usuarios/public/
-    RewriteRule ^(.*)$ public/$1 [L]
-</IfModule>
+# Se o arquivo existe fisicamente dentro de public/, serve ele diretamente
+RewriteCond %{REQUEST_URI} !^/usuarios/public/
+RewriteCond %{DOCUMENT_ROOT}/usuarios/public%{REQUEST_URI} -f
+RewriteRule ^(.+)$ public/$1 [L]
+
+# Tudo que não é arquivo/diretório real vai para o index.php (Laravel)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]
