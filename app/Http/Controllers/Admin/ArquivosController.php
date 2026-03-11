@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Arquivo;
+use App\Models\Cliente;
 use App\Models\Grupo;
 use App\Models\Subpasta;
 use Illuminate\Http\Request;
@@ -84,17 +85,13 @@ class ArquivosController extends Controller
     {
         $request->validate([
             'nome' => 'required|string|max:255',
-            'usuario' => 'required|string|max:255|unique:subpastas,usuario',
-            'password' => 'required|string|min:4',
         ]);
 
         $subpasta = $grupo->subpastas()->create([
             'nome' => $request->nome,
-            'usuario' => $request->usuario,
-            'password' => bcrypt($request->password),
         ]);
 
-        return back()->with('success', 'Subpasta e usuário criados com sucesso!');
+        return back()->with('success', 'Pasta criada com sucesso!');
     }
 
     /**
@@ -121,9 +118,53 @@ class ArquivosController extends Controller
             Storage::delete($arquivo->caminho);
         }
 
-        $subpasta->delete(); // Cascata deleta arquivos e downloads
+        $subpasta->delete(); // Cascata deleta arquivos
 
-        return back()->with('success', 'Subpasta, usuário e arquivos deletados com sucesso!');
+        return back()->with('success', 'Pasta e arquivos deletados com sucesso!');
+    }
+
+    /**
+     * Vincula um cliente existente a uma subpasta
+     */
+    public function adicionarClienteSubpasta(Request $request, Subpasta $subpasta)
+    {
+        $request->validate(['cliente_id' => 'required|exists:clientes,id']);
+
+        $subpasta->clientes()->syncWithoutDetaching([$request->cliente_id]);
+
+        return back()->with('success', 'Usuário adicionado à pasta com sucesso!');
+    }
+
+    /**
+     * Cria um novo cliente e já vincula a uma subpasta
+     */
+    public function criarClienteNaSubpasta(Request $request, Subpasta $subpasta)
+    {
+        $request->validate([
+            'nome'     => 'required|string|max:255',
+            'usuario'  => 'required|string|max:255|unique:clientes,usuario',
+            'password' => 'required|string|min:4',
+        ]);
+
+        $cliente = Cliente::create([
+            'nome'     => $request->nome,
+            'usuario'  => $request->usuario,
+            'password' => bcrypt($request->password),
+        ]);
+
+        $subpasta->clientes()->attach($cliente->id);
+
+        return back()->with('success', 'Usuário criado e vinculado à pasta com sucesso!');
+    }
+
+    /**
+     * Remove a vinculação de um cliente com uma subpasta (não apaga o usuário)
+     */
+    public function removerClienteSubpasta(Subpasta $subpasta, Cliente $cliente)
+    {
+        $subpasta->clientes()->detach($cliente->id);
+
+        return back()->with('success', 'Usuário removido da pasta com sucesso!');
     }
 
     /**

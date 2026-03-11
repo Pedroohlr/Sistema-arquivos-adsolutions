@@ -9,7 +9,7 @@ class Download extends Model
 {
     protected $fillable = [
         'arquivo_id',
-        'subpasta_id',
+        'cliente_id',
         'usuario',
         'ip_address',
         'user_agent',
@@ -32,10 +32,10 @@ class Download extends Model
     }
 
     /**
-     * Usuário (subpasta) que realizou o download
+     * Cliente que realizou o download
      */
-    public function subpasta(): BelongsTo
+    public function cliente(): BelongsTo
     {
-        return $this->belongsTo(Subpasta::class);
+        return $this->belongsTo(Cliente::class);
     }
 }

@@ -4,50 +4,44 @@ namespace App\Http\Controllers\Cliente;
 
 use App\Http\Controllers\Controller;
 use App\Models\Grupo;
+use App\Models\Subpasta;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
     /**
-     * Dashboard do cliente - mostra grupos disponíveis
+     * Dashboard do cliente - mostra subpastas/grupos disponíveis
      */
     public function index()
     {
         $cliente = auth()->guard('cliente')->user();
-        
-        // Busca o grupo da subpasta do cliente com relacionamentos
-        $grupo = $cliente->grupo;
-        
-        if ($grupo) {
-            $grupo->load(['arquivos', 'subpastas' => function($query) use ($cliente) {
-                $query->where('id', $cliente->id);
-            }]);
-        }
-        
-        return view('cliente.dashboard', compact('grupo', 'cliente'));
+
+        // Subpastas que o cliente tem acesso, com grupo e arquivos
+        $subpastas = $cliente->subpastas()->with(['grupo', 'arquivos'])->get();
+
+        // Grupos distintos acessíveis (para arquivos da raiz do grupo)
+        $grupos = $subpastas->pluck('grupo')->unique('id')->filter();
+
+        return view('cliente.dashboard', compact('subpastas', 'grupos', 'cliente'));
     }
 
     /**
-     * Visualiza um grupo específico
+     * Visualiza uma subpasta específica
      */
     public function showGrupo(Grupo $grupo)
     {
         $cliente = auth()->guard('cliente')->user();
-        
-        // Verificar se o cliente tem acesso a este grupo
-        if ($cliente->grupo_id !== $grupo->id) {
+
+        // Verificar se o cliente tem alguma subpasta neste grupo
+        $minhasSubpastas = $cliente->subpastas()->where('grupo_id', $grupo->id)->with('arquivos')->get();
+
+        if ($minhasSubpastas->isEmpty()) {
             abort(403, 'Você não tem permissão para acessar este grupo.');
         }
 
-        // Arquivos na raiz do grupo (visíveis para todos os clientes do grupo)
-        $arquivosRaiz = $grupo->arquivos;
-        
-        // Subpasta do cliente (apenas a dele)
-        $minhaSubpasta = $cliente;
-        
-        // Arquivos da subpasta do cliente
-        $meusArquivos = $cliente->arquivos;
+        // Arquivos na raiz do grupo
+        $arquivosRaiz = $grupo->arquivos()->whereNull('subpasta_id')->get();
 
-        return view('cliente.grupo', compact('grupo', 'arquivosRaiz', 'minhaSubpasta', 'meusArquivos'));
+        return view('cliente.grupo', compact('grupo', 'arquivosRaiz', 'minhasSubpastas', 'cliente'));
     }
 }

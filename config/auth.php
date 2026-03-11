@@ -82,7 +82,7 @@ return [
 
         'clientes' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Subpasta::class,
+            'model' => App\Models\Cliente::class,
         ],
     ],
 

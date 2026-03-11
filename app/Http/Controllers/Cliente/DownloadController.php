@@ -16,17 +16,20 @@ class DownloadController extends Controller
     public function download(Arquivo $arquivo)
     {
         $cliente = auth()->guard('cliente')->user();
-        
-        // Verificar permissões
+
+        // Verificar permissões: arquivo na raiz de um grupo acessível, ou em subpasta acessível
+        $subpastaIds = $cliente->subpastas()->pluck('subpastas.id');
+        $grupoIds    = $cliente->subpastas()->pluck('grupo_id');
+
         $podeAcessar = false;
 
-        // 1. Se o arquivo está na raiz do grupo do cliente
-        if (is_null($arquivo->subpasta_id) && $arquivo->grupo_id === $cliente->grupo_id) {
+        // Arquivo na raiz de um grupo acessível
+        if (is_null($arquivo->subpasta_id) && $grupoIds->contains($arquivo->grupo_id)) {
             $podeAcessar = true;
         }
 
-        // 2. Se o arquivo está na subpasta do cliente
-        if ($arquivo->subpasta_id === $cliente->id) {
+        // Arquivo em uma subpasta acessível
+        if (!is_null($arquivo->subpasta_id) && $subpastaIds->contains($arquivo->subpasta_id)) {
             $podeAcessar = true;
         }
 
@@ -34,17 +37,15 @@ class DownloadController extends Controller
             abort(403, 'Você não tem permissão para baixar este arquivo.');
         }
 
-        // Registrar download no histórico
         Download::create([
-            'arquivo_id' => $arquivo->id,
-            'subpasta_id' => $cliente->id,
-            'usuario' => $cliente->usuario,
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent(),
+            'arquivo_id'  => $arquivo->id,
+            'cliente_id'  => $cliente->id,
+            'usuario'     => $cliente->usuario,
+            'ip_address'  => request()->ip(),
+            'user_agent'  => request()->userAgent(),
             'downloaded_at' => now(),
         ]);
 
-        // Fazer download
         return Storage::download($arquivo->caminho, $arquivo->nome_original);
     }
 

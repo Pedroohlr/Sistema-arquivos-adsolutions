@@ -15,7 +15,7 @@ class HistoricoController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Download::with(['arquivo.grupo', 'arquivo.subpasta', 'subpasta']);
+        $query = Download::with(['arquivo.grupo', 'arquivo.subpasta', 'cliente']);
 
         // Filtro por grupo
         if ($request->filled('grupo_id')) {
@@ -56,7 +56,7 @@ class HistoricoController extends Controller
      */
     public function export(Request $request)
     {
-        $query = Download::with(['arquivo', 'subpasta']);
+        $query = Download::with(['arquivo', 'cliente']);
 
         // Aplicar mesmos filtros
         if ($request->filled('grupo_id')) {

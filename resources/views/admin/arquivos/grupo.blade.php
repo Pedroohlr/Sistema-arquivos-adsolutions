@@ -79,12 +79,25 @@
                                 </svg>
                                 <div>
                                     <h3 class="text-lg font-semibold text-white">{{ $subpasta->nome }}</h3>
-                                    <p class="text-sm text-gray-400 flex items-center gap-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                        </svg>
-                                        Usuário: <span class="text-[#f2c700]">{{ $subpasta->usuario }}</span>
-                                    </p>
+                                    <div class="mt-1 flex flex-wrap gap-1">
+                                        @forelse($subpasta->clientes as $c)
+                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-gray-800 text-[#f2c700]">
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                                {{ $c->nome }} <span class="text-gray-500">({{ $c->usuario }})</span>
+                                                <form method="POST" action="{{ route('admin.arquivos.subpastas.clientes.remove', [$subpasta, $c]) }}" style="display:inline">
+                                                    @csrf @method('DELETE')
+                                                    <button type="submit" class="ml-1 text-gray-500 hover:text-red-400" title="Remover acesso">&times;</button>
+                                                </form>
+                                            </span>
+                                        @empty
+                                            <span class="text-xs text-gray-500 italic">Nenhum usuário vinculado</span>
+                                        @endforelse
+                                        <button onclick="openAddClienteModal({{ $subpasta->id }})"
+                                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-gray-700 hover:bg-gray-600 text-white transition-colors">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                            Adicionar usuário
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             <div class="flex gap-2">
@@ -180,7 +193,7 @@
                     <select id="upload_local" class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700] transition-all" onchange="updateUploadLocation()">
                         <option value="">Raiz do Grupo (visível para todos)</option>
                         @foreach($grupo->subpastas as $subpasta)
-                            <option value="{{ $subpasta->id }}">{{ $subpasta->nome }} (apenas {{ $subpasta->usuario }})</option>
+                            <option value="{{ $subpasta->id }}">{{ $subpasta->nome }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -233,26 +246,16 @@
          x-transition:enter="ease-out duration-300"
          x-transition:enter-start="opacity-0 scale-95"
          x-transition:enter-end="opacity-100 scale-100">
-        <h3 class="text-lg font-semibold text-white mb-4">Nova Subpasta</h3>
+        <h3 class="text-lg font-semibold text-white mb-4">Nova Pasta</h3>
         <form action="{{ route('admin.arquivos.subpastas.store', $grupo) }}" method="POST">
             @csrf
             <div class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-white mb-2">Nome da Subpasta</label>
+                    <label class="block text-sm font-medium text-white mb-2">Nome da Pasta</label>
                     <input type="text" name="nome" required
-                           class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-white mb-2">Usuário (único)</label>
-                    <input type="text" name="usuario" required
-                           class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]">
-                    <p class="mt-1 text-xs text-gray-400">Este usuário terá acesso apenas a esta subpasta</p>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-white mb-2">Senha</label>
-                    <input type="password" name="password" required minlength="4"
-                           class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]">
-                    <p class="mt-1 text-xs text-gray-400">Mínimo 4 caracteres</p>
+                           class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]"
+                           placeholder="Ex: Documentos Financeiros">
+                    <p class="mt-1 text-xs text-gray-400">Após criar, você pode adicionar usuários à pasta</p>
                 </div>
             </div>
             <div class="mt-6 flex gap-3">
@@ -447,8 +450,7 @@ function closeCreateSubpastaModal() {
 })();
 
 function deleteSubpasta(id, nome) {
-    if (confirm(`⚠️ Tem certeza que deseja deletar a subpasta "${nome}"?\n\nTodos os arquivos e o usuário serão removidos permanentemente!\n\nEsta ação não pode ser desfeita.`)) {
-        // Adicionar loading visual
+    if (confirm(`⚠️ Tem certeza que deseja deletar a pasta "${nome}"?\n\nTodos os arquivos serão removidos permanentemente!\n\nEsta ação não pode ser desfeita.`)) {
         const button = event.target.closest('button');
         if (button) {
             button.disabled = true;
@@ -475,5 +477,181 @@ function deleteSubpasta(id, nome) {
         form.submit();
     }
 }
+
+let _addClienteSubpastaId = null;
+
+function openAddClienteModal(subpastaId) {
+    _addClienteSubpastaId = subpastaId;
+    document.getElementById('formAddExistente').action = `/admin/arquivos/subpastas/${subpastaId}/clientes`;
+    document.getElementById('formCriarCliente').action = `/admin/arquivos/subpastas/${subpastaId}/clientes/novo`;
+    document.getElementById('searchClienteInput').value = '';
+    document.getElementById('searchResultados').classList.add('hidden');
+    document.getElementById('clienteSelecionadoId').value = '';
+    document.getElementById('clienteSelecionado').classList.add('hidden');
+    switchAddClienteTab('existente');
+    const modal = document.getElementById('addClienteModal');
+    modal.classList.remove('hidden');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeAddClienteModal() {
+    const modal = document.getElementById('addClienteModal');
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+function switchAddClienteTab(tab) {
+    const contEx = document.getElementById('tabContentExistente');
+    const contNovo = document.getElementById('tabContentNovo');
+    const btnEx = document.getElementById('tabBtnExistente');
+    const btnNovo = document.getElementById('tabBtnNovo');
+
+    if (tab === 'existente') {
+        contEx.classList.remove('hidden');
+        contNovo.classList.add('hidden');
+        btnEx.classList.add('text-[#f2c700]', 'border-[#f2c700]');
+        btnEx.classList.remove('text-gray-400', 'border-transparent');
+        btnNovo.classList.remove('text-[#f2c700]', 'border-[#f2c700]');
+        btnNovo.classList.add('text-gray-400', 'border-transparent');
+    } else {
+        contNovo.classList.remove('hidden');
+        contEx.classList.add('hidden');
+        btnNovo.classList.add('text-[#f2c700]', 'border-[#f2c700]');
+        btnNovo.classList.remove('text-gray-400', 'border-transparent');
+        btnEx.classList.remove('text-[#f2c700]', 'border-[#f2c700]');
+        btnEx.classList.add('text-gray-400', 'border-transparent');
+    }
+}
+
+let _searchDebounce = null;
+function searchClientes(q) {
+    clearTimeout(_searchDebounce);
+    if (!q || q.length < 2) {
+        document.getElementById('searchResultados').classList.add('hidden');
+        return;
+    }
+    _searchDebounce = setTimeout(() => {
+        fetch(`/admin/usuarios/search?q=${encodeURIComponent(q)}`)
+            .then(r => r.json())
+            .then(data => {
+                const cont = document.getElementById('searchResultados');
+                if (!data.length) {
+                    cont.innerHTML = '<div class="px-3 py-2 text-sm text-gray-500">Nenhum usuário encontrado</div>';
+                } else {
+                    cont.innerHTML = data.map(c =>
+                        `<div class="px-3 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer" onclick="selecionarCliente(${c.id}, '${c.nome.replace(/'/g,"\\'")} (${c.usuario})')">
+                            ${c.nome} <span class="text-gray-400">@${c.usuario}</span>
+                        </div>`
+                    ).join('');
+                }
+                cont.classList.remove('hidden');
+            });
+    }, 300);
+}
+
+function selecionarCliente(id, texto) {
+    document.getElementById('clienteSelecionadoId').value = id;
+    document.getElementById('clienteSelecionadoTexto').textContent = '✓ ' + texto;
+    document.getElementById('clienteSelecionado').classList.remove('hidden');
+    document.getElementById('searchResultados').classList.add('hidden');
+    document.getElementById('searchClienteInput').value = texto;
+}
 </script>
+
+<!-- Modal: Adicionar Cliente à Pasta -->
+<div id="addClienteModal"
+     class="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4 hidden"
+     style="display:none;"
+     onclick="if(event.target === this) closeAddClienteModal();">
+    <div class="bg-[#1e1e1e] rounded-lg p-6 w-full max-w-md border border-gray-800"
+         onclick="event.stopPropagation()">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-white">Adicionar Usuário à Pasta</h3>
+            <button onclick="closeAddClienteModal()" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="flex gap-0 mb-4 border-b border-gray-700">
+            <button id="tabBtnExistente" onclick="switchAddClienteTab('existente')"
+                    class="px-4 py-2 text-sm font-medium text-[#f2c700] border-b-2 border-[#f2c700] transition-colors">
+                Usuário Existente
+            </button>
+            <button id="tabBtnNovo" onclick="switchAddClienteTab('novo')"
+                    class="px-4 py-2 text-sm font-medium text-gray-400 border-b-2 border-transparent hover:text-white transition-colors">
+                Novo Usuário
+            </button>
+        </div>
+
+        <!-- Tab: Existente -->
+        <div id="tabContentExistente">
+            <form id="formAddExistente" method="POST" action="">
+                @csrf
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-2">Buscar Usuário</label>
+                        <input type="text" id="searchClienteInput"
+                               oninput="searchClientes(this.value)"
+                               autocomplete="off"
+                               class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]"
+                               placeholder="Nome ou usuário...">
+                        <div id="searchResultados" class="mt-1 bg-[#171717] rounded-md ring-1 ring-gray-700 hidden max-h-40 overflow-y-auto"></div>
+                        <input type="hidden" name="cliente_id" id="clienteSelecionadoId">
+                        <div id="clienteSelecionado" class="mt-2 hidden">
+                            <span class="text-sm text-[#f2c700]" id="clienteSelecionadoTexto"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 flex gap-3">
+                    <button type="button" onclick="closeAddClienteModal()"
+                            class="flex-1 rounded-md bg-gray-700 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-600 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                            class="flex-1 rounded-md bg-[#f2c700] px-4 py-2 text-sm font-semibold text-black hover:bg-[#d9b300] transition-all duration-300 transform hover:scale-105 active:scale-95">
+                        Adicionar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tab: Novo -->
+        <div id="tabContentNovo" class="hidden">
+            <form id="formCriarCliente" method="POST" action="">
+                @csrf
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-2">Nome</label>
+                        <input type="text" name="nome" required
+                               class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]"
+                               placeholder="Nome completo">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-2">Usuário</label>
+                        <input type="text" name="usuario" required
+                               class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]"
+                               placeholder="nome_usuario">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-2">Senha</label>
+                        <input type="password" name="password" required minlength="6"
+                               class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]"
+                               placeholder="Mínimo 6 caracteres">
+                    </div>
+                </div>
+                <div class="mt-6 flex gap-3">
+                    <button type="button" onclick="closeAddClienteModal()"
+                            class="flex-1 rounded-md bg-gray-700 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-600 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                            class="flex-1 rounded-md bg-[#f2c700] px-4 py-2 text-sm font-semibold text-black hover:bg-[#d9b300] transition-all duration-300 transform hover:scale-105 active:scale-95">
+                        Criar e Adicionar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection

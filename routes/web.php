@@ -56,7 +56,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Gestão de Usuários
         Route::prefix('usuarios')->name('usuarios.')->group(function () {
             Route::get('/', [UsuariosController::class, 'index'])->name('index');
+            Route::post('/', [UsuariosController::class, 'store'])->name('store');
             Route::put('{usuario}', [UsuariosController::class, 'update'])->name('update');
+            Route::delete('{usuario}', [UsuariosController::class, 'destroy'])->name('destroy');
+            Route::get('search', [UsuariosController::class, 'search'])->name('search');
+        });
+
+        // Gestão de clientes em subpastas
+        Route::prefix('arquivos')->name('arquivos.')->group(function () {
+            Route::post('subpastas/{subpasta}/clientes', [ArquivosController::class, 'adicionarClienteSubpasta'])->name('subpastas.clientes.add');
+            Route::post('subpastas/{subpasta}/clientes/novo', [ArquivosController::class, 'criarClienteNaSubpasta'])->name('subpastas.clientes.create');
+            Route::delete('subpastas/{subpasta}/clientes/{cliente}', [ArquivosController::class, 'removerClienteSubpasta'])->name('subpastas.clientes.remove');
         });
 
         // Histórico de Downloads
