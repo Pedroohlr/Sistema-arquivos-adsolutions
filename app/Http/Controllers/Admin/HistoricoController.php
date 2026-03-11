@@ -68,15 +68,15 @@ class HistoricoController extends Controller
         $downloads = $query->latest('downloaded_at')->get();
 
         $filename = 'historico_downloads_' . now()->format('Y-m-d_H-i-s') . '.csv';
-        
+
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => "attachment; filename=\"$filename\"",
         ];
 
-        $callback = function() use ($downloads) {
+        $callback = function () use ($downloads) {
             $file = fopen('php://output', 'w');
-            
+
             // Cabeçalho
             fputcsv($file, ['Data/Hora', 'Arquivo', 'Usuário', 'Grupo', 'IP', 'User Agent']);
 

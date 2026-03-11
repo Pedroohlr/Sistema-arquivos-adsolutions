@@ -20,7 +20,7 @@ class UsuariosController extends Controller
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
                 $q->where('nome', 'like', '%' . $request->search . '%')
-                  ->orWhere('usuario', 'like', '%' . $request->search . '%');
+                    ->orWhere('usuario', 'like', '%' . $request->search . '%');
             });
         }
 
@@ -35,14 +35,14 @@ class UsuariosController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nome'     => 'required|string|max:255',
-            'usuario'  => 'required|string|max:255|unique:clientes,usuario',
+            'nome' => 'required|string|max:255',
+            'usuario' => 'required|string|max:255|unique:clientes,usuario',
             'password' => 'required|string|min:4',
         ]);
 
         Cliente::create([
-            'nome'     => $request->nome,
-            'usuario'  => $request->usuario,
+            'nome' => $request->nome,
+            'usuario' => $request->usuario,
             'password' => bcrypt($request->password),
         ]);
 
@@ -55,13 +55,13 @@ class UsuariosController extends Controller
     public function update(Request $request, Cliente $usuario)
     {
         $request->validate([
-            'nome'     => 'required|string|max:255',
-            'usuario'  => 'required|string|max:255|unique:clientes,usuario,' . $usuario->id,
+            'nome' => 'required|string|max:255',
+            'usuario' => 'required|string|max:255|unique:clientes,usuario,' . $usuario->id,
             'password' => 'nullable|string|min:4',
         ]);
 
         $data = [
-            'nome'    => $request->nome,
+            'nome' => $request->nome,
             'usuario' => $request->usuario,
         ];
 

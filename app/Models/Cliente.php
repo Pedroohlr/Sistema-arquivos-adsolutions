@@ -9,41 +9,41 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Cliente extends Authenticatable
 {
-    use Notifiable;
+  use Notifiable;
 
-    protected $table = 'clientes';
+  protected $table = 'clientes';
 
-    protected $fillable = [
-        'nome',
-        'usuario',
-        'password',
+  protected $fillable = [
+    'nome',
+    'usuario',
+    'password',
+  ];
+
+  protected $hidden = [
+    'password',
+    'remember_token',
+  ];
+
+  protected function casts(): array
+  {
+    return [
+      'password' => 'hashed',
     ];
+  }
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+  /**
+   * Subpastas que este cliente tem acesso
+   */
+  public function subpastas(): BelongsToMany
+  {
+    return $this->belongsToMany(Subpasta::class, 'subpasta_cliente');
+  }
 
-    protected function casts(): array
-    {
-        return [
-            'password' => 'hashed',
-        ];
-    }
-
-    /**
-     * Subpastas que este cliente tem acesso
-     */
-    public function subpastas(): BelongsToMany
-    {
-        return $this->belongsToMany(Subpasta::class, 'subpasta_cliente');
-    }
-
-    /**
-     * Downloads realizados por este cliente
-     */
-    public function downloads(): HasMany
-    {
-        return $this->hasMany(Download::class);
-    }
+  /**
+   * Downloads realizados por este cliente
+   */
+  public function downloads(): HasMany
+  {
+    return $this->hasMany(Download::class);
+  }
 }

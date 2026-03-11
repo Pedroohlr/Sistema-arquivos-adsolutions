@@ -19,7 +19,7 @@ class DownloadController extends Controller
 
         // Verificar permissões: arquivo na raiz de um grupo acessível, ou em subpasta acessível
         $subpastaIds = $cliente->subpastas()->pluck('subpastas.id');
-        $grupoIds    = $cliente->subpastas()->pluck('grupo_id');
+        $grupoIds = $cliente->subpastas()->pluck('grupo_id');
 
         $podeAcessar = false;
 
@@ -38,11 +38,11 @@ class DownloadController extends Controller
         }
 
         Download::create([
-            'arquivo_id'  => $arquivo->id,
-            'cliente_id'  => $cliente->id,
-            'usuario'     => $cliente->usuario,
-            'ip_address'  => request()->ip(),
-            'user_agent'  => request()->userAgent(),
+            'arquivo_id' => $arquivo->id,
+            'cliente_id' => $cliente->id,
+            'usuario' => $cliente->usuario,
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
             'downloaded_at' => now(),
         ]);
 

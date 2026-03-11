@@ -141,14 +141,14 @@ class ArquivosController extends Controller
     public function criarClienteNaSubpasta(Request $request, Subpasta $subpasta)
     {
         $request->validate([
-            'nome'     => 'required|string|max:255',
-            'usuario'  => 'required|string|max:255|unique:clientes,usuario',
+            'nome' => 'required|string|max:255',
+            'usuario' => 'required|string|max:255|unique:clientes,usuario',
             'password' => 'required|string|min:4',
         ]);
 
         $cliente = Cliente::create([
-            'nome'     => $request->nome,
-            'usuario'  => $request->usuario,
+            'nome' => $request->nome,
+            'usuario' => $request->usuario,
             'password' => bcrypt($request->password),
         ]);
 
@@ -173,10 +173,10 @@ class ArquivosController extends Controller
     public function uploadArquivo(Request $request)
     {
         $request->validate([
-            'grupo_id'    => 'required|exists:grupos,id',
+            'grupo_id' => 'required|exists:grupos,id',
             'subpasta_id' => 'nullable|exists:subpastas,id',
-            'arquivos'    => 'required|array|min:1',
-            'arquivos.*'  => 'file|max:512000', // 500MB max por arquivo
+            'arquivos' => 'required|array|min:1',
+            'arquivos.*' => 'file|max:512000', // 500MB max por arquivo
         ]);
 
         $grupo = Grupo::findOrFail($request->grupo_id);
@@ -188,13 +188,13 @@ class ArquivosController extends Controller
             $caminho = $file->storeAs('arquivos', $nomeArquivo);
 
             Arquivo::create([
-                'nome'         => $file->getClientOriginalName(),
-                'nome_original'=> $file->getClientOriginalName(),
-                'caminho'      => $caminho,
-                'tamanho'      => $file->getSize(),
-                'tipo_mime'    => $file->getMimeType(),
-                'grupo_id'     => $request->grupo_id,
-                'subpasta_id'  => $subpastaId,
+                'nome' => $file->getClientOriginalName(),
+                'nome_original' => $file->getClientOriginalName(),
+                'caminho' => $caminho,
+                'tamanho' => $file->getSize(),
+                'tipo_mime' => $file->getMimeType(),
+                'grupo_id' => $request->grupo_id,
+                'subpasta_id' => $subpastaId,
             ]);
 
             $enviados++;

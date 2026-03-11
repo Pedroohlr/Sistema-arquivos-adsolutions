@@ -35,18 +35,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Gestão de Arquivos
         Route::prefix('arquivos')->name('arquivos.')->group(function () {
             Route::get('/', [ArquivosController::class, 'index'])->name('index');
-            
+
             // Grupos
             Route::post('grupos', [ArquivosController::class, 'storeGrupo'])->name('grupos.store');
             Route::get('grupos/{grupo}', [ArquivosController::class, 'showGrupo'])->name('grupo');
             Route::put('grupos/{grupo}', [ArquivosController::class, 'updateGrupo'])->name('grupos.update');
             Route::delete('grupos/{grupo}', [ArquivosController::class, 'destroyGrupo'])->name('grupos.destroy');
-            
+
             // Subpastas
             Route::post('grupos/{grupo}/subpastas', [ArquivosController::class, 'storeSubpasta'])->name('subpastas.store');
             Route::put('subpastas/{subpasta}', [ArquivosController::class, 'updateSubpasta'])->name('subpastas.update');
             Route::delete('subpastas/{subpasta}', [ArquivosController::class, 'destroySubpasta'])->name('subpastas.destroy');
-            
+
             // Arquivos
             Route::post('upload', [ArquivosController::class, 'uploadArquivo'])->name('upload');
             Route::put('arquivos/{arquivo}/mover', [ArquivosController::class, 'moverArquivo'])->name('arquivos.mover');
@@ -95,7 +95,7 @@ Route::prefix('cliente')->name('cliente.')->group(function () {
         Route::post('logout', [ClienteAuthController::class, 'logout'])->name('logout');
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('grupos/{grupo}', [DashboardController::class, 'showGrupo'])->name('grupos.show');
-        
+
         // Downloads
         Route::get('download/{arquivo}', [DownloadController::class, 'download'])->name('download');
         Route::get('historico', [DownloadController::class, 'historico'])->name('historico');
