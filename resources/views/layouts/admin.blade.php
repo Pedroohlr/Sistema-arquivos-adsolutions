@@ -189,5 +189,6 @@
             document.body.style.overflow = menu.classList.contains('hidden') ? '' : 'hidden';
         }
     </script>
+    @stack('scripts')
 </body>
 </html>
