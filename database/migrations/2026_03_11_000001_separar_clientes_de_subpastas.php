@@ -62,6 +62,10 @@ return new class extends Migration
         });
 
         // 5. Remover colunas de autenticação da tabela subpastas
+        // SQLite requer remover o índice único antes de dropar a coluna
+        Schema::table('subpastas', function (Blueprint $table) {
+            $table->dropUnique('subpastas_usuario_unique');
+        });
         Schema::table('subpastas', function (Blueprint $table) {
             $table->dropColumn(['usuario', 'password', 'remember_token']);
         });
