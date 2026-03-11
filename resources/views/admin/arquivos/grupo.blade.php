@@ -206,7 +206,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                                 </svg>
                                 <p class="mb-2 text-sm text-gray-400"><span class="font-semibold text-[#f2c700]">Clique para upload</span> ou arraste e solte</p>
-                                <p class="text-xs text-gray-500">Múltiplos arquivos • Máx. 100MB cada</p>
+                                <p class="text-xs text-gray-500">Múltiplos arquivos • Máx. 500MB cada</p>
                             </div>
                             <input type="file" name="arquivos[]" required multiple class="hidden" onchange="updateFileName(this)">
                             <span id="fileName" class="text-sm text-gray-400 mt-2 block text-center pb-2"></span>

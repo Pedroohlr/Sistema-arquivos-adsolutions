@@ -176,7 +176,7 @@ class ArquivosController extends Controller
             'grupo_id'    => 'required|exists:grupos,id',
             'subpasta_id' => 'nullable|exists:subpastas,id',
             'arquivos'    => 'required|array|min:1',
-            'arquivos.*'  => 'file|max:102400', // 100MB max por arquivo
+            'arquivos.*'  => 'file|max:512000', // 500MB max por arquivo
         ]);
 
         $grupo = Grupo::findOrFail($request->grupo_id);
