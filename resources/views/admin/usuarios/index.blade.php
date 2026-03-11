@@ -143,24 +143,24 @@
         onclick="closeModal('createUsuarioModal')">
         <div class="bg-[#1e1e1e] rounded-lg p-6 w-full max-w-md border border-gray-800" onclick="event.stopPropagation()">
             <h3 class="text-lg font-semibold text-white mb-4">Novo Usuário</h3>
-            <form method="POST" action="{{ route('admin.usuarios.store') }}">
+            <form method="POST" action="{{ route('admin.usuarios.store') }}" autocomplete="off">
                 @csrf
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-white mb-1">Nome</label>
-                        <input type="text" name="nome" required
+                        <input type="text" name="nome" required autocomplete="off"
                             class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]"
                             placeholder="Nome completo">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-white mb-1">Usuário</label>
-                        <input type="text" name="usuario" required
+                        <input type="text" name="usuario" required autocomplete="off"
                             class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]"
                             placeholder="login único">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-white mb-1">Senha</label>
-                        <input type="password" name="password" required minlength="4"
+                        <input type="password" name="password" required minlength="4" autocomplete="new-password"
                             class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]"
                             placeholder="Mínimo 4 caracteres">
                     </div>

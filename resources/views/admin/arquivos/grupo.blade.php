@@ -73,98 +73,105 @@
                 Subpastas (acesso restrito por usuário)
             </h2>
             @if($grupo->subpastas->count() > 0)
-                <div class="space-y-4">
+                <div class="space-y-2">
                     @foreach($grupo->subpastas as $subpasta)
-                        <div
-                            class="bg-[#1e1e1e] rounded-lg border border-gray-800 p-6 hover:border-[#f2c700]/50 transition-all duration-300 transform hover:scale-[1.01]">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center gap-3">
-                                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                        <div class="bg-[#1e1e1e] rounded-lg border border-gray-800 overflow-hidden transition-all duration-200"
+                             id="accordion-{{ $subpasta->id }}">
+
+                            {{-- Cabeçalho clicável --}}
+                            <div class="flex items-center justify-between px-4 py-3 cursor-pointer select-none hover:bg-[#252525] transition-colors"
+                                 onclick="toggleAccordion({{ $subpasta->id }})">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    {{-- Chevron --}}
+                                    <svg id="chevron-{{ $subpasta->id }}" class="w-4 h-4 text-gray-400 transition-transform duration-200 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                     </svg>
-                                    <div>
-                                        <h3 class="text-lg font-semibold text-white">{{ $subpasta->nome }}</h3>
-                                        <div class="mt-1 flex flex-wrap gap-1">
-                                            @forelse($subpasta->clientes as $c)
-                                                <span
-                                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-gray-800 text-[#f2c700]">
-                                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                                                        <path
-                                                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                                                    </svg>
-                                                    {{ $c->nome }} <span class="text-gray-500">({{ $c->usuario }})</span>
-                                                    <form method="POST"
-                                                        action="{{ route('admin.arquivos.subpastas.clientes.remove', [$subpasta, $c]) }}"
-                                                        style="display:inline">
-                                                        @csrf @method('DELETE')
-                                                        <button type="submit" class="ml-1 text-gray-500 hover:text-red-400"
-                                                            title="Remover acesso">&times;</button>
-                                                    </form>
-                                                </span>
-                                            @empty
-                                                <span class="text-xs text-gray-500 italic">Nenhum usuário vinculado</span>
-                                            @endforelse
-                                            <button onclick="openAddClienteModal({{ $subpasta->id }})"
-                                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-gray-700 hover:bg-gray-600 text-white transition-colors">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M12 4v16m8-8H4" />
-                                                </svg>
-                                                Adicionar usuário
-                                            </button>
-                                        </div>
+                                    <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                                    </svg>
+                                    <div class="min-w-0">
+                                        <span class="font-semibold text-white">{{ $subpasta->nome }}</span>
+                                        <span class="ml-2 text-xs text-gray-500">{{ $subpasta->arquivos->count() }} arquivo(s)</span>
+                                    </div>
+                                    {{-- Badges de usuários (inline, truncados) --}}
+                                    <div class="hidden sm:flex flex-wrap gap-1 ml-2">
+                                        @foreach($subpasta->clientes as $c)
+                                            <span class="px-2 py-0.5 rounded text-xs bg-gray-800 text-[#f2c700]">{{ $c->usuario }}</span>
+                                        @endforeach
+                                        @if($subpasta->clientes->isEmpty())
+                                            <span class="text-xs text-gray-600 italic">Sem usuário</span>
+                                        @endif
                                     </div>
                                 </div>
-                                <div class="flex gap-2">
+                                {{-- Botões de ação (param propagação para não abrir/fechar) --}}
+                                <div class="flex gap-2 flex-shrink-0" onclick="event.stopPropagation()">
                                     <button onclick="uploadToSubpasta({{ $subpasta->id }})"
-                                        class="p-2 bg-[#f2c700] hover:bg-[#d9b300] rounded-lg text-black transition-all duration-300 transform hover:scale-110"
-                                        title="Upload para esta subpasta">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                        class="p-1.5 bg-[#f2c700] hover:bg-[#d9b300] rounded text-black transition-colors" title="Upload">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                                         </svg>
                                     </button>
                                     <button onclick="editSubpasta({{ $subpasta->id }}, '{{ addslashes($subpasta->nome) }}')"
-                                        class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white transition-all duration-300 transform hover:scale-110"
-                                        title="Editar subpasta">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        class="p-1.5 bg-gray-700 hover:bg-gray-600 rounded text-white transition-colors" title="Editar">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                         </svg>
                                     </button>
                                     <button onclick="deleteSubpasta({{ $subpasta->id }}, '{{ addslashes($subpasta->nome) }}')"
-                                        class="p-2 bg-red-900 hover:bg-red-800 rounded-lg text-white transition-all duration-300 transform hover:scale-110"
-                                        title="Deletar subpasta">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        class="p-1.5 bg-red-900 hover:bg-red-800 rounded text-white transition-colors" title="Deletar">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                         </svg>
                                     </button>
                                 </div>
                             </div>
 
-                            <!-- Arquivos da Subpasta -->
-                            @if($subpasta->arquivos->count() > 0)
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    @foreach($subpasta->arquivos as $arquivo)
-                                        @include('admin.arquivos.partials.arquivo-card', ['arquivo' => $arquivo])
-                                    @endforeach
-                                </div>
-                            @else
-                                <div class="border border-gray-700 border-dashed rounded-lg p-8 text-center">
-                                    <svg class="mx-auto h-12 w-12 text-gray-600 mb-3" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-                                    </svg>
-                                    <p class="text-sm text-gray-400">Nenhum arquivo nesta subpasta</p>
-                                    <button onclick="uploadToSubpasta({{ $subpasta->id }})"
-                                        class="mt-3 text-xs text-[#f2c700] hover:text-[#d9b300] transition-colors">
-                                        Clique para adicionar arquivos
+                            {{-- Corpo colapsável --}}
+                            <div id="body-{{ $subpasta->id }}" class="hidden border-t border-gray-800 px-4 py-4">
+                                {{-- Gestão de usuários --}}
+                                <div class="flex flex-wrap gap-1 mb-4">
+                                    @forelse($subpasta->clientes as $c)
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-gray-800 text-[#f2c700]">
+                                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                            </svg>
+                                            {{ $c->nome }} <span class="text-gray-500">({{ $c->usuario }})</span>
+                                            <form method="POST" action="{{ route('admin.arquivos.subpastas.clientes.remove', [$subpasta, $c]) }}" style="display:inline">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="ml-1 text-gray-500 hover:text-red-400" title="Remover acesso">&times;</button>
+                                            </form>
+                                        </span>
+                                    @empty
+                                        <span class="text-xs text-gray-500 italic">Nenhum usuário vinculado</span>
+                                    @endforelse
+                                    <button onclick="openAddClienteModal({{ $subpasta->id }})"
+                                        class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-gray-700 hover:bg-gray-600 text-white transition-colors">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                        </svg>
+                                        Adicionar usuário
                                     </button>
                                 </div>
-                            @endif
+
+                                {{-- Arquivos --}}
+                                @if($subpasta->arquivos->count() > 0)
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        @foreach($subpasta->arquivos as $arquivo)
+                                            @include('admin.arquivos.partials.arquivo-card', ['arquivo' => $arquivo])
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <div class="border border-gray-700 border-dashed rounded-lg p-8 text-center">
+                                        <svg class="mx-auto h-10 w-10 text-gray-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                                        </svg>
+                                        <p class="text-sm text-gray-400">Nenhum arquivo nesta pasta</p>
+                                        <button onclick="uploadToSubpasta({{ $subpasta->id }})" class="mt-2 text-xs text-[#f2c700] hover:text-[#d9b300] transition-colors">
+                                            Clique para adicionar arquivos
+                                        </button>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -209,7 +216,7 @@
                         <select id="upload_local"
                             class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700] transition-all"
                             onchange="updateUploadLocation()">
-                            <option value="">Raiz do Grupo (visível para todos)</option>
+                            <option value="">Raiz de {{ $grupo->nome }} (visível para todos)</option>
                             @foreach($grupo->subpastas as $subpasta)
                                 <option value="{{ $subpasta->id }}">{{ $subpasta->nome }}</option>
                             @endforeach
@@ -502,7 +509,20 @@
             }
         }
 
-        let _addClienteSubpastaId = null;
+        function toggleAccordion(id) {
+    const body = document.getElementById('body-' + id);
+    const chevron = document.getElementById('chevron-' + id);
+    const isOpen = !body.classList.contains('hidden');
+    if (isOpen) {
+        body.classList.add('hidden');
+        chevron.style.transform = 'rotate(0deg)';
+    } else {
+        body.classList.remove('hidden');
+        chevron.style.transform = 'rotate(90deg)';
+    }
+}
+
+let _addClienteSubpastaId = null;
 
         function openAddClienteModal(subpastaId) {
             _addClienteSubpastaId = subpastaId;
