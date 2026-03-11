@@ -71,7 +71,7 @@
                                         </div>
                                         <div>
                                             <div class="text-sm font-medium text-white">{{ $cliente->nome }}</div>
-                                            <div class="text-xs text-gray-400">@{{ $cliente->usuario }}</div>
+                                            <div class="text-xs text-gray-400">{{ '@'.$cliente->usuario }}</div>
                                         </div>
                                     </div>
                                 </td>
