@@ -173,30 +173,35 @@ class ArquivosController extends Controller
     public function uploadArquivo(Request $request)
     {
         $request->validate([
-            'grupo_id' => 'required|exists:grupos,id',
+            'grupo_id'    => 'required|exists:grupos,id',
             'subpasta_id' => 'nullable|exists:subpastas,id',
-            'arquivo' => 'required|file|max:102400', // 100MB max
+            'arquivos'    => 'required|array|min:1',
+            'arquivos.*'  => 'file|max:102400', // 100MB max por arquivo
         ]);
 
-        $file = $request->file('arquivo');
         $grupo = Grupo::findOrFail($request->grupo_id);
+        $subpastaId = $request->subpasta_id ?: null;
+        $enviados = 0;
 
-        // Gerar nome único para o arquivo
-        $nomeArquivo = Str::uuid() . '.' . $file->getClientOriginalExtension();
-        $caminho = $file->storeAs('arquivos', $nomeArquivo);
+        foreach ($request->file('arquivos') as $file) {
+            $nomeArquivo = Str::uuid() . '.' . $file->getClientOriginalExtension();
+            $caminho = $file->storeAs('arquivos', $nomeArquivo);
 
-        // Criar registro no banco
-        $arquivo = Arquivo::create([
-            'nome' => $file->getClientOriginalName(), // Nome para exibição
-            'nome_original' => $file->getClientOriginalName(),
-            'caminho' => $caminho,
-            'tamanho' => $file->getSize(),
-            'tipo_mime' => $file->getMimeType(),
-            'grupo_id' => $request->grupo_id,
-            'subpasta_id' => $request->subpasta_id ?: null,
-        ]);
+            Arquivo::create([
+                'nome'         => $file->getClientOriginalName(),
+                'nome_original'=> $file->getClientOriginalName(),
+                'caminho'      => $caminho,
+                'tamanho'      => $file->getSize(),
+                'tipo_mime'    => $file->getMimeType(),
+                'grupo_id'     => $request->grupo_id,
+                'subpasta_id'  => $subpastaId,
+            ]);
 
-        return back()->with('success', 'Arquivo enviado com sucesso!');
+            $enviados++;
+        }
+
+        $msg = $enviados === 1 ? 'Arquivo enviado com sucesso!' : "{$enviados} arquivos enviados com sucesso!";
+        return back()->with('success', $msg);
     }
 
     /**

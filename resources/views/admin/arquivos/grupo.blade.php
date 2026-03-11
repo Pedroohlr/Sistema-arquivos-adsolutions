@@ -180,7 +180,7 @@
          x-transition:enter="ease-out duration-300"
          x-transition:enter-start="opacity-0 scale-95"
          x-transition:enter-end="opacity-100 scale-100">
-        <h3 class="text-lg font-semibold text-white mb-4">Upload de Arquivo</h3>
+        <h3 class="text-lg font-semibold text-white mb-4">Upload de Arquivos</h3>
         <form action="{{ route('admin.arquivos.upload') }}" method="POST" enctype="multipart/form-data"
               @submit="uploading = true">
             @csrf
@@ -206,10 +206,10 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                                 </svg>
                                 <p class="mb-2 text-sm text-gray-400"><span class="font-semibold text-[#f2c700]">Clique para upload</span> ou arraste e solte</p>
-                                <p class="text-xs text-gray-500">Tamanho máximo: 100MB</p>
+                                <p class="text-xs text-gray-500">Múltiplos arquivos • Máx. 100MB cada</p>
                             </div>
-                            <input type="file" name="arquivo" required class="hidden" onchange="updateFileName(this)">
-                            <span id="fileName" class="text-sm text-gray-400 mt-2"></span>
+                            <input type="file" name="arquivos[]" required multiple class="hidden" onchange="updateFileName(this)">
+                            <span id="fileName" class="text-sm text-gray-400 mt-2 block text-center pb-2"></span>
                         </label>
                     </div>
                 </div>
@@ -343,10 +343,15 @@ function updateUploadLocation() {
 }
 
 function updateFileName(input) {
-    const fileName = input.files[0]?.name || '';
     const fileNameSpan = document.getElementById('fileName');
-    if (fileNameSpan) {
-        fileNameSpan.textContent = fileName ? `Arquivo selecionado: ${fileName}` : '';
+    if (!fileNameSpan) return;
+    const count = input.files.length;
+    if (count === 0) {
+        fileNameSpan.textContent = '';
+    } else if (count === 1) {
+        fileNameSpan.textContent = `✓ ${input.files[0].name}`;
+    } else {
+        fileNameSpan.textContent = `✓ ${count} arquivos selecionados`;
     }
 }
 
