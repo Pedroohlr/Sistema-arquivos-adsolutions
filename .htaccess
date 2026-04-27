@@ -1,13 +1,7 @@
 Options -Indexes
 RewriteEngine On
-RewriteBase /usuarios/
 
-# Se o arquivo existe fisicamente dentro de public/, serve ele diretamente
-RewriteCond %{REQUEST_URI} !^/usuarios/public/
-RewriteCond %{DOCUMENT_ROOT}/usuarios/public%{REQUEST_URI} -f
-RewriteRule ^(.+)$ public/$1 [L]
-
-# Tudo que não é arquivo/diretório real vai para o index.php (Laravel)
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ index.php [L]
+# Encaminha requisicoes para a pasta public/, independente do nome da subpasta.
+# Ex.: /adsolutions -> /adsolutions/public
+RewriteCond %{REQUEST_URI} !/public/
+RewriteRule ^(.*)$ public/$1 [L]

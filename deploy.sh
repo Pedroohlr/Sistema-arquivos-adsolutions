@@ -1,46 +1,94 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # =============================================================
 # Script de deploy — Sistema Arquivos ADSolutions
 # Execute no servidor: bash deploy.sh
 # =============================================================
 
-set -e  # Para imediatamente se qualquer comando falhar
+set -euo pipefail
 
-APP_DIR="$HOME/adsolutions.siteup.dev/www/usuarios"
+APP_DIR="${APP_DIR:-$HOME/adsolutions.siteup.dev/www/usuarios}"
+BRANCH="${BRANCH:-main}"
+WEB_USER="${WEB_USER:-}"
+WEB_GROUP="${WEB_GROUP:-}"
 
 echo "=============================="
 echo " Iniciando deploy..."
+echo " Diretório: $APP_DIR"
+echo " Branch:    $BRANCH"
 echo "=============================="
+
+if [[ ! -d "$APP_DIR" ]]; then
+	echo "Erro: diretório da aplicação não existe: $APP_DIR"
+	exit 1
+fi
 
 cd "$APP_DIR"
 
-# 1. Baixar atualizações do repositório
-echo "[1/7] Atualizando código via git..."
-git pull origin main
+if [[ ! -f artisan ]]; then
+	echo "Erro: arquivo artisan não encontrado em $APP_DIR"
+	exit 1
+fi
 
-# 2. Instalar/atualizar dependências PHP (sem pacotes dev)
-echo "[2/7] Instalando dependências PHP..."
-composer install --no-dev --optimize-autoloader --no-interaction
+if [[ ! -f .env ]]; then
+	echo "Erro: arquivo .env não encontrado. Crie e configure antes do deploy."
+	exit 1
+fi
 
-# 3. Rodar migrations sem pedir confirmação
-echo "[3/7] Rodando migrations..."
+if [[ -z "$WEB_USER" ]]; then
+	if id -u www-data >/dev/null 2>&1; then
+		WEB_USER="www-data"
+	elif id -u http >/dev/null 2>&1; then
+		WEB_USER="http"
+	else
+		WEB_USER="$(id -un)"
+	fi
+fi
+
+if [[ -z "$WEB_GROUP" ]]; then
+	if getent group "$WEB_USER" >/dev/null 2>&1; then
+		WEB_GROUP="$WEB_USER"
+	else
+		WEB_GROUP="$(id -gn)"
+	fi
+fi
+
+echo "[1/10] Ativando modo manutenção..."
+php artisan down || true
+
+echo "[2/10] Atualizando código via git..."
+git fetch origin "$BRANCH"
+git checkout "$BRANCH"
+git pull --ff-only origin "$BRANCH"
+
+echo "[3/10] Instalando dependências PHP (produção)..."
+composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
+
+echo "[4/10] Instalando dependências Node..."
+npm ci --no-audit --no-fund
+
+echo "[5/10] Gerando build de assets (Vite)..."
+npm run build
+
+echo "[6/10] Garantindo link público de storage..."
+php artisan storage:link || true
+
+echo "[7/10] Rodando migrations..."
 php artisan migrate --force
 
-# 4. Limpar e recriar caches de otimização
-echo "[4/6] Otimizando caches..."
+echo "[8/10] Limpando e reconstruindo caches..."
+php artisan optimize:clear
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 php artisan event:cache
 
-# 5. Garantir permissões corretas
-echo "[5/6] Ajustando permissões..."
+echo "[9/10] Ajustando permissões..."
 chmod -R 775 storage bootstrap/cache database
-chown -R www-data:www-data storage bootstrap/cache public/storage database 2>/dev/null || true
+chown -R "$WEB_USER":"$WEB_GROUP" storage bootstrap/cache public/storage database 2>/dev/null || true
 
-# 6. Reiniciar filas (se estiver usando supervisor)
-echo "[6/6] Reiniciando workers de fila..."
-php artisan queue:restart
+echo "[10/10] Reiniciando workers de fila e saindo da manutenção..."
+php artisan queue:restart || true
+php artisan up
 
 echo ""
 echo "=============================="
