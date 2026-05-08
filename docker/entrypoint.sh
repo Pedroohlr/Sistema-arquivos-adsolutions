@@ -36,6 +36,8 @@ if ! grep -q '^APP_KEY=base64:' .env 2>/dev/null; then
     php artisan key:generate --force --no-interaction || true
 fi
 
+php artisan package:discover --ansi || true
+
 php artisan optimize:clear || true
 
 if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
