@@ -10,7 +10,7 @@
         </div>
 
         <!-- Boas-vindas -->
-        <div class="bg-gradient-to-r from-[#f2c700]/20 to-[#f2c700]/10 rounded-lg border border-[#f2c700]/30 p-6">
+        <div class="rounded-lg border border-[#f2c700]/30 bg-gradient-to-r from-[#f2c700]/20 to-[#f2c700]/10 p-5 sm:p-6">
             <div class="flex items-center gap-3 mb-2">
                 <svg class="w-6 h-6 text-[#f2c700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -31,17 +31,17 @@
                     $minhasSubpastasNoGrupo = $subpastas->where('grupo_id', $grupo->id);
                     $totalMeusArquivos = $minhasSubpastasNoGrupo->sum(fn($s) => $s->arquivos->count());
                 @endphp
-                <div class="bg-[#1e1e1e] rounded-lg border border-gray-800 p-8 hover:border-[#f2c700] transition-all">
-                    <div class="flex items-start justify-between mb-6">
-                        <div class="flex items-center gap-4">
-                            <div class="p-4 bg-[#f2c700]/20 rounded-lg">
+                <div class="rounded-lg border border-gray-800 bg-[#1e1e1e] p-5 transition-all hover:border-[#f2c700] sm:p-8">
+                    <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                        <div class="flex items-start gap-4 sm:items-center">
+                            <div class="rounded-lg bg-[#f2c700]/20 p-3 sm:p-4">
                                 <svg class="w-12 h-12 text-[#f2c700]" fill="currentColor" viewBox="0 0 24 24">
                                     <path
                                         d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" />
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-2xl font-bold text-white">{{ $grupo->nome }}</h2>
+                                <h2 class="text-xl font-bold text-white sm:text-2xl">{{ $grupo->nome }}</h2>
                                 @if($grupo->descricao)
                                     <p class="text-gray-400 mt-1">{{ $grupo->descricao }}</p>
                                 @endif
@@ -50,7 +50,7 @@
                     </div>
 
                     <!-- Estatísticas -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div class="bg-[#171717] rounded-lg p-4 border border-gray-800">
                             <div class="flex items-center gap-3">
                                 <div class="p-2 bg-gray-700/50 rounded-lg">

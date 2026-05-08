@@ -5,15 +5,15 @@
 @section('content')
     <div class="space-y-6">
         <!-- Breadcrumb -->
-        <nav class="flex items-center gap-2 text-sm text-gray-400">
-            <a href="{{ route('cliente.dashboard') }}" class="hover:text-[#f2c700] transition-colors">Dashboard</a>
+        <nav class="flex flex-wrap items-center gap-2 text-sm text-gray-400">
+            <a href="{{ route('cliente.dashboard') }}" class="transition-colors hover:text-primary">Dashboard</a>
             <span>/</span>
             <span class="text-white">{{ $grupo->nome }}</span>
         </nav>
 
         <!-- Header -->
         <div>
-            <h1 class="text-3xl font-bold text-white">{{ $grupo->nome }}</h1>
+            <h1 class="text-2xl font-bold text-white sm:text-3xl">{{ $grupo->nome }}</h1>
             @if($grupo->descricao)
                 <p class="mt-1 text-sm text-gray-400">{{ $grupo->descricao }}</p>
             @endif
@@ -22,7 +22,7 @@
         <!-- Arquivos do Grupo (Raiz) -->
         <div>
             <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <svg class="w-6 h-6 text-[#f2c700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                 </svg>
@@ -30,7 +30,7 @@
             </h2>
 
             @if($arquivosRaiz->count() > 0)
-                <div class="bg-[#1e1e1e] rounded-lg border border-gray-800 overflow-hidden">
+                <div class="rounded-lg border border-gray-800 bg-bg-secondary overflow-hidden">
                     <div class="divide-y divide-gray-800">
                         @foreach($arquivosRaiz as $arquivo)
                             @include('cliente.partials.arquivo-list-item', ['arquivo' => $arquivo])
@@ -38,7 +38,7 @@
                     </div>
                 </div>
             @else
-                <div class="bg-[#1e1e1e] rounded-lg border border-gray-800 border-dashed p-12 text-center">
+                <div class="rounded-lg border border-gray-800 border-dashed bg-bg-secondary p-8 text-center sm:p-12">
                     <div class="animate-pulse">
                         <svg class="mx-auto h-16 w-16 text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -56,15 +56,15 @@
         @foreach($minhasSubpastas as $subpasta)
             <div>
                 <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                    <svg class="w-6 h-6 text-[#f2c700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                     </svg>
-                    Minha Pasta: <span class="text-[#f2c700]">{{ $subpasta->nome }}</span>
+                    Minha Pasta: <span class="text-primary">{{ $subpasta->nome }}</span>
                 </h2>
 
                 @if($subpasta->arquivos->count() > 0)
-                    <div class="bg-[#1e1e1e] rounded-lg border border-gray-800 overflow-hidden">
+                    <div class="rounded-lg border border-gray-800 bg-bg-secondary overflow-hidden">
                         <div class="divide-y divide-gray-800">
                             @foreach($subpasta->arquivos as $arquivo)
                                 @include('cliente.partials.arquivo-list-item', ['arquivo' => $arquivo])
@@ -72,7 +72,7 @@
                         </div>
                     </div>
                 @else
-                    <div class="bg-[#1e1e1e] rounded-lg border border-gray-800 border-dashed p-12 text-center">
+                    <div class="rounded-lg border border-gray-800 border-dashed bg-bg-secondary p-8 text-center sm:p-12">
                         <div class="animate-pulse">
                             <svg class="mx-auto h-16 w-16 text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

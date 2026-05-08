@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $appUrl = config('app.url');
 
-        if (! is_string($appUrl) || $appUrl === '') {
+        if (!is_string($appUrl) || $appUrl === '') {
             return;
         }
 
@@ -35,4 +35,3 @@ class AppServiceProvider extends ServiceProvider
         }
     }
 }
- 

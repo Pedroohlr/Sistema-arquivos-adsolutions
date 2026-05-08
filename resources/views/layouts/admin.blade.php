@@ -17,7 +17,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="h-full bg-[#171717] text-white font-sans antialiased">
+<body class="h-full overflow-x-hidden bg-[#171717] text-white font-sans antialiased">
     <div class="min-h-full flex">
         <!-- Sidebar Desktop -->
         <aside class="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:z-50">
@@ -82,29 +82,32 @@
         </aside>
 
         <!-- Mobile Navbar -->
-        <nav class="lg:hidden bg-[#1e1e1e] border-b border-gray-800 w-full fixed top-0 z-50">
+        <nav class="lg:hidden fixed top-0 z-50 w-full border-b border-gray-800 bg-[#1e1e1e]/95 backdrop-blur">
             <div class="px-4 sm:px-6">
                 <div class="flex h-16 items-center justify-between">
-                    <div class="flex items-center">
+                    <div class="flex min-w-0 items-center gap-3">
                         <img src="{{ asset('images/logo.webp') }}" alt="Logo" class="h-12 w-auto object-contain">
-                        <button onclick="toggleMobileMenu()"
-                            class="ml-4 p-2 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                        </button>
+                        <div class="min-w-0">
+                            <p class="truncate text-sm font-semibold text-white">Painel Administrativo</p>
+                            <p class="truncate text-xs text-gray-400">{{ auth()->guard('admin')->user()->name }}</p>
+                        </div>
                     </div>
-                    <div class="flex items-center">
-                        <span
-                            class="text-sm text-gray-300 mr-4 hidden sm:block">{{ auth()->guard('admin')->user()->name }}</span>
-                        <form method="POST" action="{{ route('admin.logout') }}">
+                    <div class="flex items-center gap-2">
+                        <form method="POST" action="{{ route('admin.logout') }}" class="hidden sm:block">
                             @csrf
                             <button type="submit"
                                 class="rounded-md bg-gray-800 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-300">
                                 Sair
                             </button>
                         </form>
+                        <button onclick="toggleMobileMenu()"
+                            class="rounded-md p-2 text-gray-300 hover:bg-gray-700 hover:text-white"
+                            aria-label="Abrir menu">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -113,7 +116,7 @@
         <!-- Main Content -->
         <main class="flex-1 lg:pl-64">
             <div class="pt-16 lg:pt-0">
-                <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                <div class="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8 lg:py-6">
                     <!-- Toast Notifications -->
                     @if (session('success'))
                         <x-toast type="success" :message="session('success')" />
@@ -138,7 +141,7 @@
     <!-- Menu Mobile -->
     <div id="mobileMenu" class="hidden lg:hidden fixed inset-0 z-50 bg-black bg-opacity-75"
         onclick="toggleMobileMenu()">
-        <div class="bg-[#1e1e1e] w-64 h-full shadow-xl" onclick="event.stopPropagation()">
+        <div class="ml-auto h-full w-full max-w-xs bg-[#1e1e1e] shadow-xl" onclick="event.stopPropagation()">
             <div class="p-4 border-b border-gray-800 flex items-center justify-between">
                 <img src="{{ asset('images/logo.webp') }}" alt="Logo" class="h-12 w-auto object-contain">
                 <button onclick="toggleMobileMenu()" class="text-gray-400 hover:text-white">
@@ -148,7 +151,8 @@
                     </svg>
                 </button>
             </div>
-            <nav class="p-4 space-y-2">
+            <nav class="flex h-[calc(100%-81px)] flex-col p-4">
+                <div class="space-y-2">
                 <a href="{{ route('admin.arquivos.index') }}"
                     class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors
                           {{ request()->routeIs('admin.arquivos.*') || request()->routeIs('admin.dashboard') ? 'bg-gray-700 text-white' : '' }}">
@@ -174,7 +178,8 @@
                     </svg>
                     Histórico
                 </a>
-                <div class="pt-4 border-t border-gray-800">
+                </div>
+                <div class="mt-auto pt-4 border-t border-gray-800">
                     <p class="px-4 py-2 text-sm text-gray-400">{{ auth()->guard('admin')->user()->name }}</p>
                     <form method="POST" action="{{ route('admin.logout') }}">
                         @csrf

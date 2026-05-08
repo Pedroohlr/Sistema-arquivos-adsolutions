@@ -1,8 +1,8 @@
-<div class="bg-[#171717] border border-gray-800 rounded-lg p-4 hover:border-[#f2c700] transition-all duration-300 group transform hover:scale-[1.02] hover:shadow-lg hover:shadow-[#f2c700]/10">
-    <div class="flex items-start justify-between mb-3">
-        <div class="flex items-center gap-3 flex-1 min-w-0">
+<div class="group transform rounded-lg border border-gray-800 bg-bg-primary p-4 transition-all duration-300 hover:scale-[1.02] hover:border-primary hover:shadow-lg hover:shadow-primary/10">
+    <div class="mb-3 flex items-start justify-between gap-3">
+        <div class="flex min-w-0 flex-1 items-center gap-3">
             <!-- Ícone baseado no tipo de arquivo -->
-            <div class="flex-shrink-0 transform group-hover:scale-110 transition-transform duration-300">
+            <div class="shrink-0 transform transition-transform duration-300 group-hover:scale-110">
                 @php
                     $extension = pathinfo($arquivo->nome, PATHINFO_EXTENSION);
                     $iconColor = 'text-gray-400';
@@ -18,13 +18,13 @@
                 </svg>
             </div>
             <div class="min-w-0 flex-1">
-                <h4 class="text-white font-medium text-sm truncate group-hover:text-[#f2c700] transition-colors">{{ $arquivo->nome }}</h4>
+                <h4 class="truncate text-sm font-medium text-white transition-colors group-hover:text-primary">{{ $arquivo->nome }}</h4>
                 <p class="text-xs text-gray-400 mt-0.5">{{ $arquivo->tamanho_formatado }}</p>
             </div>
         </div>
         
         <!-- Botões de ação -->
-        <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
+        <div class="flex flex-shrink-0 gap-1 opacity-100 transition-all duration-300 sm:translate-x-2 sm:opacity-0 sm:group-hover:translate-x-0 sm:group-hover:opacity-100">
             <button onclick="deleteArquivo({{ $arquivo->id }}, '{{ addslashes($arquivo->nome) }}')"
                     class="p-1.5 bg-red-900 hover:bg-red-800 rounded text-white transition-colors transform hover:scale-110"
                     title="Deletar arquivo">

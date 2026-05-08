@@ -5,13 +5,13 @@
 @section('content')
     <div class="space-y-6">
         <!-- Header -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h1 class="text-3xl font-bold text-white">Gerenciar Usuários</h1>
                 <p class="mt-1 text-sm text-gray-400">Crie e gerencie os usuários do sistema</p>
             </div>
             <button onclick="openModal('createUsuarioModal')"
-                class="flex items-center gap-2 rounded-md bg-[#f2c700] px-4 py-2 text-sm font-semibold text-black hover:bg-[#d9b300] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-[#f2c700]/20">
+                class="flex w-full items-center justify-center gap-2 rounded-md bg-[#f2c700] px-4 py-2 text-sm font-semibold text-black transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-[#f2c700]/20 hover:bg-[#d9b300] sm:w-auto">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -32,25 +32,74 @@
 
         <!-- Filtros -->
         <div class="bg-[#1e1e1e] rounded-lg border border-gray-800 p-4">
-            <form method="GET" action="{{ route('admin.usuarios.index') }}" class="flex gap-4 items-end">
+            <form method="GET" action="{{ route('admin.usuarios.index') }}" class="flex flex-col gap-4 md:flex-row md:items-end">
                 <div class="flex-1">
                     <label class="block text-sm font-medium text-white mb-2">Buscar</label>
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Nome ou usuário..."
                         class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]">
                 </div>
-                <button type="submit"
-                    class="rounded-md bg-[#f2c700] px-6 py-2 text-sm font-semibold text-black hover:bg-[#d9b300] transition-colors">Filtrar</button>
-                @if(request('search'))
-                    <a href="{{ route('admin.usuarios.index') }}"
-                        class="rounded-md bg-gray-700 px-6 py-2 text-sm font-semibold text-white hover:bg-gray-600 transition-colors">Limpar</a>
-                @endif
+                <div class="flex flex-col gap-3 sm:flex-row">
+                    <button type="submit"
+                        class="rounded-md bg-[#f2c700] px-6 py-2 text-sm font-semibold text-black hover:bg-[#d9b300] transition-colors">Filtrar</button>
+                    @if(request('search'))
+                        <a href="{{ route('admin.usuarios.index') }}"
+                            class="rounded-md bg-gray-700 px-6 py-2 text-center text-sm font-semibold text-white hover:bg-gray-600 transition-colors">Limpar</a>
+                    @endif
+                </div>
             </form>
         </div>
 
         <!-- Tabela de Usuários -->
         @if($clientes->count() > 0)
             <div class="bg-[#1e1e1e] rounded-lg border border-gray-800 overflow-hidden">
-                <div class="overflow-x-auto">
+                <div class="divide-y divide-gray-800 md:hidden">
+                    @foreach($clientes as $cliente)
+                        <div class="space-y-4 p-4">
+                            <div class="flex items-start gap-3">
+                                <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#f2c700]">
+                                    <svg class="h-5 w-5 text-black" fill="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                    </svg>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <div class="text-sm font-medium text-white">{{ $cliente->nome }}</div>
+                                    <div class="text-xs text-gray-400">{{ '@' . $cliente->usuario }}</div>
+                                    <div class="mt-2 text-xs text-gray-500">Criado em {{ $cliente->created_at->format('d/m/Y') }}</div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">Pastas com acesso</div>
+                                @if($cliente->subpastas->count() > 0)
+                                    <div class="flex flex-wrap gap-1">
+                                        @foreach($cliente->subpastas as $subpasta)
+                                            <span
+                                                class="inline-flex items-center gap-1 rounded px-2 py-0.5 text-xs bg-gray-800 text-gray-300">
+                                                <span class="text-[#f2c700]">{{ $subpasta->grupo->nome ?? '—' }}</span>
+                                                <span>/</span>
+                                                {{ $subpasta->nome }}
+                                            </span>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <span class="text-xs italic text-gray-500">Sem pastas vinculadas</span>
+                                @endif
+                            </div>
+                            <div class="flex flex-col gap-2 sm:flex-row">
+                                <button
+                                    onclick="editUsuario({{ $cliente->id }}, '{{ addslashes($cliente->nome) }}', '{{ addslashes($cliente->usuario) }}')"
+                                    class="rounded-md bg-gray-800 px-3 py-2 text-sm text-[#f2c700] transition-colors hover:bg-gray-700 hover:text-[#d9b300]">
+                                    Editar
+                                </button>
+                                <button onclick="deleteUsuario({{ $cliente->id }}, '{{ addslashes($cliente->nome) }}')"
+                                    class="rounded-md bg-red-900/40 px-3 py-2 text-sm text-red-300 transition-colors hover:bg-red-900/70 hover:text-red-200">
+                                    Remover
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="hidden overflow-x-auto md:block">
                     <table class="min-w-full divide-y divide-gray-800">
                         <thead class="bg-[#171717]">
                             <tr>
@@ -120,7 +169,7 @@
                     </table>
                 </div>
             </div>
-            <div class="flex items-center justify-between text-sm text-gray-400">
+            <div class="flex flex-col gap-4 text-sm text-gray-400 sm:flex-row sm:items-center sm:justify-between">
                 <span>Mostrando {{ $clientes->firstItem() ?? 0 }}–{{ $clientes->lastItem() ?? 0 }} de
                     {{ $clientes->total() }}</span>
                 {{ $clientes->links() }}

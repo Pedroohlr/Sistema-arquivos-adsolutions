@@ -5,13 +5,13 @@
 @section('content')
     <div class="space-y-6">
         <!-- Header -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h1 class="text-3xl font-bold text-white">Gerenciar Arquivos</h1>
                 <p class="mt-1 text-sm text-gray-400">Crie grupos e organize seus arquivos para os clientes</p>
             </div>
             <button onclick="openModal('createGrupoModal')"
-                class="rounded-md bg-[#f2c700] px-4 py-2 text-sm font-semibold text-black hover:bg-[#d9b300] transition-all duration-300 flex items-center gap-2 transform hover:scale-105 active:scale-95 shadow-lg shadow-[#f2c700]/20 hover:shadow-[#f2c700]/30">
+                class="flex w-full items-center justify-center gap-2 rounded-md bg-[#f2c700] px-4 py-2 text-sm font-semibold text-black transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-[#f2c700]/20 hover:bg-[#d9b300] hover:shadow-[#f2c700]/30 sm:w-auto">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>

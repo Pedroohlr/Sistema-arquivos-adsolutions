@@ -1,6 +1,6 @@
 <div class="p-4 hover:bg-[#171717] transition-colors duration-200">
-    <div class="flex items-center justify-between gap-4">
-        <div class="flex items-center gap-4 flex-1 min-w-0">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex min-w-0 flex-1 items-start gap-4 sm:items-center">
             <!-- Ícone padronizado -->
             <div class="flex-shrink-0">
                 <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -11,7 +11,7 @@
             <!-- Informações do arquivo -->
             <div class="min-w-0 flex-1">
                 <h4 class="text-white font-medium text-base mb-1 truncate">{{ $arquivo->nome }}</h4>
-                <div class="flex items-center gap-4 text-xs text-gray-400">
+                <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-400">
                     <span class="flex items-center gap-1">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
@@ -32,7 +32,7 @@
         <div class="flex-shrink-0" x-data="{ loading: false }">
             <a href="{{ route('cliente.download', $arquivo) }}" 
                @click="loading = true; setTimeout(() => loading = false, 2000)"
-               class="inline-flex items-center gap-2 rounded-md bg-[#f2c700] px-4 py-2 text-sm font-semibold text-black hover:bg-[#d9b300] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-md shadow-[#f2c700]/20">
+               class="inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#f2c700] px-4 py-2 text-sm font-semibold text-black hover:bg-[#d9b300] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-md shadow-[#f2c700]/20 sm:w-auto">
                 <svg x-show="!loading" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                 </svg>

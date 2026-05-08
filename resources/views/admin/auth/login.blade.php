@@ -14,12 +14,12 @@
 </head>
 
 <body class="h-full bg-[#171717]">
-    <div class="flex h-screen">
+    <div class="flex min-h-screen flex-col md:flex-row">
         <!-- Lado Esquerdo - Card de Login -->
-        <div class="w-1/2 flex items-center justify-center px-6 py-12 lg:px-12">
+        <div class="flex w-full items-center justify-center px-4 py-10 sm:px-6 md:w-1/2 md:px-8 md:py-12 lg:px-12">
             <div class="w-full max-w-md">
                 <div class="flex justify-center mb-8">
-                    <img src="{{ asset('images/logo.webp') }}" alt="Logo" class="h-24 w-auto object-contain">
+                    <img src="{{ asset('images/logo.webp') }}" alt="Logo" class="h-20 w-auto object-contain sm:h-24">
                 </div>
                 <h2 class="text-center text-2xl font-bold leading-9 tracking-tight text-white mb-10">
                     Painel Administrativo
@@ -62,7 +62,7 @@
 
                     <div>
                         <button type="submit"
-                            class="flex w-full justify-center rounded-md bg-[#f2c700] px-3 py-2.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-[#d9b300] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f2c700] transition-colors">
+                            class="flex w-full justify-center rounded-md bg-[#f2c700] px-3 py-2.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-[#d9b300] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f2c700] transition-colors">
                             Entrar
                         </button>
                     </div>
@@ -77,7 +77,7 @@
         </div>
 
         <!-- Lado Direito - Imagem -->
-        <div class="hidden md:block w-1/2 relative">
+        <div class="relative hidden min-h-70 md:block md:w-1/2">
             <img src="{{ asset('images/mulher-tablet.webp') }}" alt="Login" class="h-full w-full object-cover">
         </div>
     </div>

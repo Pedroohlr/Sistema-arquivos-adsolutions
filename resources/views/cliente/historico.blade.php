@@ -13,7 +13,37 @@
     <!-- Tabela de Downloads -->
     @if($downloads->count() > 0)
         <div class="bg-[#1e1e1e] rounded-lg border border-gray-800 overflow-hidden">
-            <div class="overflow-x-auto">
+            <div class="divide-y divide-gray-800 md:hidden">
+                @foreach($downloads as $download)
+                    <div class="space-y-4 p-4">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <div class="text-sm font-medium text-white">{{ $download->downloaded_at->format('d/m/Y') }}</div>
+                                <div class="text-xs text-gray-400">{{ $download->downloaded_at->format('H:i:s') }}</div>
+                            </div>
+                            <div class="rounded-full bg-[#f2c700]/15 px-2.5 py-1 text-xs font-medium text-[#f2c700]">
+                                {{ $download->arquivo->tamanho_formatado }}
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <svg class="h-6 w-6 flex-shrink-0 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                            </svg>
+                            <div class="min-w-0 flex-1">
+                                <div class="truncate text-sm font-medium text-white">{{ $download->arquivo->nome }}</div>
+                            </div>
+                        </div>
+                        <a href="{{ route('cliente.download', $download->arquivo) }}" 
+                           class="inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#f2c700] px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-[#d9b300]">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                            </svg>
+                            Baixar Novamente
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+            <div class="hidden overflow-x-auto md:block">
                 <table class="min-w-full divide-y divide-gray-800">
                     <thead class="bg-[#171717]">
                         <tr>
@@ -74,7 +104,7 @@
         </div>
 
         <!-- Paginação -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div class="text-sm text-gray-400">
                 Mostrando {{ $downloads->firstItem() ?? 0 }} a {{ $downloads->lastItem() ?? 0 }} de {{ $downloads->total() }} downloads
             </div>

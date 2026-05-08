@@ -13,13 +13,13 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="h-full bg-[#171717]">
-    <div class="flex h-screen">
+<body class="h-full bg-bg-primary">
+    <div class="flex min-h-screen flex-col md:flex-row">
         <!-- Lado Esquerdo - Card de Login -->
-        <div class="w-1/2 flex items-center justify-center px-6 py-12 lg:px-12">
+        <div class="flex w-full items-center justify-center px-4 py-10 sm:px-6 md:w-1/2 md:px-8 md:py-12 lg:px-12">
             <div class="w-full max-w-md">
                 <div class="flex justify-center mb-8">
-                    <img src="{{ asset('images/logo.webp') }}" alt="Logo" class="h-24 w-auto object-contain">
+                    <img src="{{ asset('images/logo.webp') }}" alt="Logo" class="h-20 w-auto object-contain sm:h-24">
                 </div>
                 <h2 class="text-center text-2xl font-bold leading-9 tracking-tight text-white mb-10">
                     Portal do Cliente
@@ -39,7 +39,7 @@
                         <div class="mt-2">
                             <input id="usuario" name="usuario" type="text" autocomplete="username" required
                                 value="{{ old('usuario') }}"
-                                class="block w-full rounded-md border-0 bg-[#1e1e1e] py-2.5 px-3 text-white shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-[#f2c700] sm:text-sm sm:leading-6">
+                                class="block w-full rounded-md border-0 bg-bg-secondary py-2.5 px-3 text-white shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6">
                         </div>
                     </div>
 
@@ -48,13 +48,13 @@
                         <div class="mt-2">
                             <input id="password" name="password" type="password" autocomplete="current-password"
                                 required
-                                class="block w-full rounded-md border-0 bg-[#1e1e1e] py-2.5 px-3 text-white shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-[#f2c700] sm:text-sm sm:leading-6">
+                                class="block w-full rounded-md border-0 bg-bg-secondary py-2.5 px-3 text-white shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6">
                         </div>
                     </div>
 
                     <div class="flex items-center">
                         <input id="remember" name="remember" type="checkbox"
-                            class="h-4 w-4 rounded border-gray-700 bg-[#1e1e1e] text-[#f2c700] focus:ring-[#f2c700]">
+                            class="h-4 w-4 rounded border-gray-700 bg-bg-secondary text-primary focus:ring-primary">
                         <label for="remember" class="ml-2 block text-sm text-gray-300">
                             Lembrar-me
                         </label>
@@ -62,14 +62,14 @@
 
                     <div>
                         <button type="submit"
-                            class="flex w-full justify-center rounded-md bg-[#f2c700] px-3 py-2.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-[#d9b300] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f2c700] transition-colors">
+                            class="flex w-full justify-center rounded-md bg-primary px-3 py-2.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-[#d9b300] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-colors">
                             Entrar
                         </button>
                     </div>
                 </form>
 
                 <p class="mt-10 text-center text-sm text-gray-400">
-                    <a href="{{ route('admin.login') }}" class="font-semibold text-[#f2c700] hover:text-[#d9b300]">
+                    <a href="{{ route('admin.login') }}" class="font-semibold text-primary hover:text-[#d9b300]">
                         Acessar como administrador
                     </a>
                 </p>
@@ -77,7 +77,7 @@
         </div>
 
         <!-- Lado Direito - Imagem -->
-        <div class="hidden md:block w-1/2 relative">
+        <div class="relative hidden min-h-70 md:block md:w-1/2">
             <img src="{{ asset('images/mulher-tablet.webp') }}" alt="Login" class="h-full w-full object-cover">
         </div>
     </div>

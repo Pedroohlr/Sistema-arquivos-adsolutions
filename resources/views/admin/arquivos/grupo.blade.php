@@ -5,9 +5,9 @@
 @section('content')
     <div class="space-y-6">
         <!-- Header com Breadcrumb -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
-                <nav class="flex items-center gap-2 text-sm text-gray-400 mb-2">
+                <nav class="mb-2 flex flex-wrap items-center gap-2 text-sm text-gray-400">
                     <a href="{{ route('admin.arquivos.index') }}" class="hover:text-[#f2c700]">Arquivos</a>
                     <span>/</span>
                     <span class="text-white">{{ $grupo->nome }}</span>
@@ -17,9 +17,9 @@
                     <p class="mt-1 text-sm text-gray-400">{{ $grupo->descricao }}</p>
                 @endif
             </div>
-            <div class="flex gap-3">
+            <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
                 <button onclick="openModal('uploadModal')"
-                    class="rounded-md bg-[#f2c700] px-4 py-2 text-sm font-semibold text-black hover:bg-[#d9b300] transition-all duration-300 flex items-center gap-2 transform hover:scale-105 active:scale-95 shadow-lg shadow-[#f2c700]/20">
+                    class="flex items-center justify-center gap-2 rounded-md bg-[#f2c700] px-4 py-2 text-sm font-semibold text-black transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-[#f2c700]/20 hover:bg-[#d9b300]">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -27,7 +27,7 @@
                     Upload Arquivo
                 </button>
                 <button onclick="openModal('createSubpastaModal')"
-                    class="rounded-md bg-gray-700 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-600 transition-all duration-300 flex items-center gap-2 transform hover:scale-105 active:scale-95">
+                    class="flex items-center justify-center gap-2 rounded-md bg-gray-700 px-4 py-2 text-sm font-semibold text-white transition-all duration-300 transform hover:scale-105 active:scale-95 hover:bg-gray-600">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
@@ -79,9 +79,9 @@
                             id="accordion-{{ $subpasta->id }}">
 
                             {{-- Cabeçalho clicável --}}
-                            <div class="flex items-center justify-between px-4 py-3 cursor-pointer select-none hover:bg-[#252525] transition-colors"
+                            <div class="flex cursor-pointer select-none flex-col gap-3 px-4 py-3 transition-colors hover:bg-[#252525] sm:flex-row sm:items-center sm:justify-between"
                                 onclick="toggleAccordion({{ $subpasta->id }})">
-                                <div class="flex items-center gap-3 min-w-0">
+                                <div class="flex min-w-0 items-start gap-3 sm:items-center">
                                     {{-- Chevron --}}
                                     <svg id="chevron-{{ $subpasta->id }}"
                                         class="w-4 h-4 text-gray-400 transition-transform duration-200 flex-shrink-0" fill="none"
@@ -110,7 +110,7 @@
                                     </div>
                                 </div>
                                 {{-- Botões de ação (param propagação para não abrir/fechar) --}}
-                                <div class="flex gap-2 flex-shrink-0" onclick="event.stopPropagation()">
+                                <div class="flex w-full flex-wrap gap-2 sm:w-auto sm:flex-nowrap" onclick="event.stopPropagation()">
                                     <button onclick="uploadToSubpasta({{ $subpasta->id }})"
                                         class="p-1.5 bg-[#f2c700] hover:bg-[#d9b300] rounded text-black transition-colors"
                                         title="Upload">

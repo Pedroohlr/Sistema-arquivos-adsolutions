@@ -5,13 +5,13 @@
 @section('content')
 <div class="space-y-6">
     <!-- Header -->
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <h1 class="text-3xl font-bold text-white">Histórico de Downloads</h1>
             <p class="mt-1 text-sm text-gray-400">Acompanhe todos os downloads realizados pelos clientes</p>
         </div>
         <a href="{{ route('admin.historico.export', request()->query()) }}" 
-           class="rounded-md bg-[#f2c700] px-4 py-2 text-sm font-semibold text-black hover:bg-[#d9b300] transition-all duration-300 flex items-center gap-2 transform hover:scale-105 active:scale-95 shadow-lg shadow-[#f2c700]/20">
+           class="flex w-full items-center justify-center gap-2 rounded-md bg-[#f2c700] px-4 py-2 text-sm font-semibold text-black transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-[#f2c700]/20 hover:bg-[#d9b300] sm:w-auto">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
@@ -99,7 +99,7 @@
                        class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]">
             </div>
 
-            <div class="md:col-span-4 flex gap-3">
+            <div class="md:col-span-4 flex flex-col gap-3 sm:flex-row">
                 <button type="submit" 
                         class="rounded-md bg-[#f2c700] px-6 py-2 text-sm font-semibold text-black hover:bg-[#d9b300] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-[#f2c700]/20">
                     Aplicar Filtros
@@ -117,7 +117,42 @@
     <!-- Tabela de Downloads -->
     @if($downloads->count() > 0)
         <div class="bg-[#1e1e1e] rounded-lg border border-gray-800 overflow-hidden">
-            <div class="overflow-x-auto">
+            <div class="divide-y divide-gray-800 md:hidden">
+                @foreach($downloads as $download)
+                    <div class="space-y-4 p-4">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <div class="text-sm font-medium text-white">{{ $download->downloaded_at->format('d/m/Y') }}</div>
+                                <div class="text-xs text-gray-400">{{ $download->downloaded_at->format('H:i:s') }}</div>
+                            </div>
+                            <div class="rounded-full bg-[#f2c700]/15 px-2.5 py-1 text-xs font-medium text-[#f2c700]">
+                                {{ $download->ip_address ?? 'N/A' }}
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <svg class="mt-0.5 h-6 w-6 flex-shrink-0 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                            </svg>
+                            <div class="min-w-0 flex-1">
+                                <div class="truncate text-sm font-medium text-white">{{ $download->arquivo->nome }}</div>
+                                <div class="mt-1 text-xs text-gray-400">{{ $download->arquivo->tamanho_formatado }}</div>
+                            </div>
+                        </div>
+                        <div class="grid gap-3 rounded-lg bg-[#171717] p-3 text-sm text-gray-300">
+                            <div>
+                                <div class="text-xs uppercase tracking-wide text-gray-500">Usuário</div>
+                                <div class="mt-1 text-white">{{ $download->usuario }}</div>
+                            </div>
+                            <div>
+                                <div class="text-xs uppercase tracking-wide text-gray-500">Grupo / Pasta</div>
+                                <div class="mt-1 text-white">{{ $download->arquivo->grupo->nome }}</div>
+                                <div class="text-xs text-gray-400">{{ $download->arquivo->subpasta?->nome ?? 'Raiz do grupo' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <div class="hidden overflow-x-auto md:block">
                 <table class="min-w-full divide-y divide-gray-800">
                     <thead class="bg-[#171717]">
                         <tr>
@@ -193,7 +228,7 @@
         </div>
 
         <!-- Paginação -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div class="text-sm text-gray-400">
                 Mostrando {{ $downloads->firstItem() ?? 0 }} a {{ $downloads->lastItem() ?? 0 }} de {{ $downloads->total() }} downloads
             </div>
