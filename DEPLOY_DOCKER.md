@@ -59,3 +59,40 @@ docker compose exec app ls -la storage/app
 - Nao usar `route:cache`, porque o projeto tem rota com closure.
 - Se quiser popular dados de demo no primeiro boot, defina `RUN_SEEDERS=true` na `.env`, suba uma vez, depois volte para `false`.
 - Se futuramente quiser migrar para MySQL/MariaDB, a estrutura Docker continua aproveitavel; basta trocar a conexao e adicionar o servico do banco no `docker-compose.yml`.
+
+## WordPress na raiz e Laravel em /adarquivo
+
+Se o WordPress ficar em `/` e este sistema em `/adarquivo`, o caminho recomendado e:
+
+1. deixar o WordPress atendendo na raiz pelo Apache do host
+2. subir este container em outra porta, por exemplo `8080`
+3. configurar proxy reverso no Apache do host para encaminhar `/adarquivo/` para o container
+
+### .env do Laravel
+
+```env
+APP_URL=http://SEU_DOMINIO/adarquivo
+ASSET_URL=http://SEU_DOMINIO/adarquivo
+APP_PORT=8080
+```
+
+O projeto foi ajustado para respeitar `APP_URL` na geracao de URLs e redirects.
+
+### Exemplo de Apache no host
+
+Habilite os modulos `proxy`, `proxy_http`, `headers` e use algo nesta linha no vhost do host:
+
+```apache
+ProxyPreserveHost On
+RequestHeader set X-Forwarded-Prefix "/adarquivo"
+
+RedirectMatch 302 ^/adarquivo$ /adarquivo/
+
+ProxyPass /adarquivo/ http://127.0.0.1:8080/
+ProxyPassReverse /adarquivo/ http://127.0.0.1:8080/
+```
+
+Com isso:
+
+- `https://dominio/` continua no WordPress
+- `https://dominio/adarquivo/` aponta para este Laravel
