@@ -372,6 +372,26 @@
 
         // Função closeModal já está definida acima
 
+        function arquivosSubpastaUpdateUrl(id) {
+            return '{{ route('admin.arquivos.subpastas.update', '__ID__') }}'.replace('__ID__', id);
+        }
+
+        function arquivosSubpastaDestroyUrl(id) {
+            return '{{ route('admin.arquivos.subpastas.destroy', '__ID__') }}'.replace('__ID__', id);
+        }
+
+        function arquivosSubpastaClientesAddUrl(id) {
+            return '{{ route('admin.arquivos.subpastas.clientes.add', '__ID__') }}'.replace('__ID__', id);
+        }
+
+        function arquivosSubpastaClientesCreateUrl(id) {
+            return '{{ route('admin.arquivos.subpastas.clientes.create', '__ID__') }}'.replace('__ID__', id);
+        }
+
+        function usuariosSearchUrl() {
+            return '{{ route('admin.usuarios.search') }}';
+        }
+
         function uploadToSubpasta(subpastaId) {
             // Atualizar o select
             const select = document.getElementById('upload_local');
@@ -511,7 +531,7 @@
 
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = `/admin/arquivos/subpastas/${id}`;
+                form.action = arquivosSubpastaDestroyUrl(id);
 
                 const csrf = document.createElement('input');
                 csrf.type = 'hidden';
@@ -547,10 +567,12 @@
 
         function openAddClienteModal(subpastaId) {
             _addClienteSubpastaId = subpastaId;
-            document.getElementById('formAddExistente').action = `/admin/arquivos/subpastas/${subpastaId}/clientes`;
-            document.getElementById('formCriarCliente').action = `/admin/arquivos/subpastas/${subpastaId}/clientes/novo`;
+            document.getElementById('formAddExistente').action = arquivosSubpastaClientesAddUrl(subpastaId);
+            document.getElementById('formCriarCliente').action = arquivosSubpastaClientesCreateUrl(subpastaId);
             document.getElementById('searchClienteInput').value = '';
+            document.getElementById('searchHint').textContent = 'Digite pelo menos 4 caracteres para buscar.';
             document.getElementById('searchResultados').classList.add('hidden');
+            document.getElementById('searchResultados').innerHTML = '';
             document.getElementById('clienteSelecionadoId').value = '';
             document.getElementById('clienteSelecionado').classList.add('hidden');
             switchAddClienteTab('existente');
@@ -593,12 +615,23 @@
         let _searchDebounce = null;
         function searchClientes(q) {
             clearTimeout(_searchDebounce);
-            if (!q || q.length < 2) {
+            const hint = document.getElementById('searchHint');
+
+            if (!q || q.length < 4) {
+                if (hint) {
+                    hint.textContent = 'Digite pelo menos 4 caracteres para buscar.';
+                }
                 document.getElementById('searchResultados').classList.add('hidden');
+                document.getElementById('searchResultados').innerHTML = '';
                 return;
             }
+
+            if (hint) {
+                hint.textContent = 'Buscando usuários...';
+            }
+
             _searchDebounce = setTimeout(() => {
-                fetch(`/admin/usuarios/search?q=${encodeURIComponent(q)}`)
+                fetch(`${usuariosSearchUrl()}?q=${encodeURIComponent(q)}`)
                     .then(r => r.json())
                     .then(data => {
                         const cont = document.getElementById('searchResultados');
@@ -607,10 +640,21 @@
                         } else {
                             cont.innerHTML = data.map(c =>
                                 `<div class="px-3 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer" onclick="selecionarCliente(${c.id}, '${c.nome.replace(/'/g, "\\'")} (${c.usuario})')">
-                                    ${c.nome} <span class="text-gray-400">@${c.usuario}</span>
-                                </div>`
+                                        ${c.nome} <span class="text-gray-400">@${c.usuario}</span>
+                                    </div>`
                             ).join('');
                         }
+                        if (hint) {
+                            hint.textContent = `${data.length} usuário(s) encontrado(s).`;
+                        }
+                        cont.classList.remove('hidden');
+                    })
+                    .catch(() => {
+                        const cont = document.getElementById('searchResultados');
+                        if (hint) {
+                            hint.textContent = 'Não foi possível buscar os usuários agora.';
+                        }
+                        cont.innerHTML = '<div class="px-3 py-2 text-sm text-red-300">Erro ao buscar usuários</div>';
                         cont.classList.remove('hidden');
                     });
             }, 300);
@@ -622,6 +666,7 @@
             document.getElementById('clienteSelecionado').classList.remove('hidden');
             document.getElementById('searchResultados').classList.add('hidden');
             document.getElementById('searchClienteInput').value = texto;
+            document.getElementById('searchHint').textContent = 'Usuário selecionado.';
         }
     </script>
 
@@ -658,6 +703,7 @@
                                 autocomplete="off"
                                 class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]"
                                 placeholder="Nome ou usuário...">
+                            <p id="searchHint" class="mt-1 text-xs text-gray-400">Digite pelo menos 4 caracteres para buscar.</p>
                             <div id="searchResultados"
                                 class="mt-1 bg-[#171717] rounded-md ring-1 ring-gray-700 hidden max-h-40 overflow-y-auto">
                             </div>

@@ -288,8 +288,12 @@
 
         // Função closeModal já está definida acima como window.closeModal
 
+        function adminArquivosGrupoUrl(id) {
+            return '{{ route('admin.arquivos.grupos.update', '__ID__') }}'.replace('__ID__', id);
+        }
+
         function editGrupo(id, nome, descricao) {
-            document.getElementById('editGrupoForm').action = `/admin/arquivos/grupos/${id}`;
+            document.getElementById('editGrupoForm').action = adminArquivosGrupoUrl(id);
             document.getElementById('edit_nome').value = nome;
             document.getElementById('edit_descricao').value = descricao || '';
             openModal('editGrupoModal');
@@ -324,7 +328,7 @@
         })();
 
         function deleteGrupo(id, nome) {
-            document.getElementById('deleteGrupoForm').action = `/admin/arquivos/grupos/${id}`;
+            document.getElementById('deleteGrupoForm').action = adminArquivosGrupoUrl(id);
             document.getElementById('delete_grupo_nome').textContent = nome;
             const modal = document.getElementById('deleteGrupoModal');
             if (modal) {

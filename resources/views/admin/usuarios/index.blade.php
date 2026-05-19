@@ -32,7 +32,8 @@
 
         <!-- Filtros -->
         <div class="bg-[#1e1e1e] rounded-lg border border-gray-800 p-4">
-            <form method="GET" action="{{ route('admin.usuarios.index') }}" class="flex flex-col gap-4 md:flex-row md:items-end">
+            <form method="GET" action="{{ route('admin.usuarios.index') }}"
+                class="flex flex-col gap-4 md:flex-row md:items-end">
                 <div class="flex-1">
                     <label class="block text-sm font-medium text-white mb-2">Buscar</label>
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Nome ou usuário..."
@@ -65,11 +66,13 @@
                                 <div class="min-w-0 flex-1">
                                     <div class="text-sm font-medium text-white">{{ $cliente->nome }}</div>
                                     <div class="text-xs text-gray-400">{{ '@' . $cliente->usuario }}</div>
-                                    <div class="mt-2 text-xs text-gray-500">Criado em {{ $cliente->created_at->format('d/m/Y') }}</div>
+                                    <div class="mt-2 text-xs text-gray-500">Criado em {{ $cliente->created_at->format('d/m/Y') }}
+                                    </div>
                                 </div>
                             </div>
                             <div>
-                                <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">Pastas com acesso</div>
+                                <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">Pastas com acesso
+                                </div>
                                 @if($cliente->subpastas->count() > 0)
                                     <div class="flex flex-wrap gap-1">
                                         @foreach($cliente->subpastas as $subpasta)

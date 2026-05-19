@@ -80,7 +80,8 @@
                         <img src="{{ asset('images/logo.webp') }}" alt="Logo" class="h-12 w-auto object-contain">
                         <div class="min-w-0">
                             <p class="truncate text-sm font-semibold text-white">Portal do Cliente</p>
-                            <p class="truncate text-xs text-gray-400">{{ auth()->guard('cliente')->user()->usuario }}</p>
+                            <p class="truncate text-xs text-gray-400">{{ auth()->guard('cliente')->user()->usuario }}
+                            </p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
@@ -124,7 +125,8 @@
     </div>
     <div id="mobileMenu" class="hidden lg:hidden fixed inset-0 z-50 bg-black bg-opacity-75"
         onclick="toggleMobileMenu()">
-        <div class="ml-auto flex h-full w-full max-w-xs flex-col bg-[#1e1e1e] shadow-xl" onclick="event.stopPropagation()">
+        <div class="ml-auto flex h-full w-full max-w-xs flex-col bg-[#1e1e1e] shadow-xl"
+            onclick="event.stopPropagation()">
             <div class="flex items-center justify-between border-b border-gray-800 p-4">
                 <img src="{{ asset('images/logo.webp') }}" alt="Logo" class="h-12 w-auto object-contain">
                 <button onclick="toggleMobileMenu()" class="text-gray-400 hover:text-white" aria-label="Fechar menu">

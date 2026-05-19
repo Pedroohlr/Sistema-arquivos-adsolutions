@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ArquivosController;
+use App\Http\Controllers\Admin\AdminsController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\HistoricoController;
 use App\Http\Controllers\Admin\UsuariosController;
@@ -60,6 +61,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('{usuario}', [UsuariosController::class, 'update'])->name('update');
             Route::delete('{usuario}', [UsuariosController::class, 'destroy'])->name('destroy');
             Route::get('search', [UsuariosController::class, 'search'])->name('search');
+        });
+
+        // Gestão de Administradores
+        Route::prefix('admins')->name('admins.')->group(function () {
+            Route::get('/', [AdminsController::class, 'index'])->name('index');
+            Route::post('/', [AdminsController::class, 'store'])->name('store');
+            Route::put('{admin}', [AdminsController::class, 'update'])->name('update');
+            Route::delete('{admin}', [AdminsController::class, 'destroy'])->name('destroy');
         });
 
         // Gestão de clientes em subpastas
