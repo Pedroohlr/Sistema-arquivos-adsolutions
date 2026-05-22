@@ -274,6 +274,17 @@
 
     @push('scripts')
         <script>
+            const usuarioUpdateUrlTemplate = @json(route('admin.usuarios.update', ['usuario' => '__ID__']));
+            const usuarioDeleteUrlTemplate = @json(route('admin.usuarios.destroy', ['usuario' => '__ID__']));
+
+            function usuarioUpdateUrl(id) {
+                return usuarioUpdateUrlTemplate.replace('__ID__', id);
+            }
+
+            function usuarioDeleteUrl(id) {
+                return usuarioDeleteUrlTemplate.replace('__ID__', id);
+            }
+
             function openModal(id) {
                 document.getElementById(id).classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
@@ -283,7 +294,7 @@
                 document.body.style.overflow = '';
             }
             function editUsuario(id, nome, usuario) {
-                document.getElementById('editUsuarioForm').action = `/admin/usuarios/${id}`;
+                document.getElementById('editUsuarioForm').action = usuarioUpdateUrl(id);
                 document.getElementById('edit_nome').value = nome;
                 document.getElementById('edit_usuario').value = usuario;
                 document.getElementById('edit_password').value = '';
@@ -293,7 +304,7 @@
                 if (!confirm(`Remover o usuário "${nome}"?\n\nEsta ação não pode ser desfeita.`)) return;
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = `/admin/usuarios/${id}`;
+                form.action = usuarioDeleteUrl(id);
                 const csrf = document.createElement('input');
                 csrf.type = 'hidden'; csrf.name = '_token'; csrf.value = '{{ csrf_token() }}';
                 const method = document.createElement('input');

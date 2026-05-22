@@ -103,6 +103,8 @@ Route::prefix('cliente')->name('cliente.')->group(function () {
     Route::middleware('cliente')->group(function () {
         Route::post('logout', [ClienteAuthController::class, 'logout'])->name('logout');
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('senha', [ClienteAuthController::class, 'showPasswordForm'])->name('password.edit');
+        Route::put('senha', [ClienteAuthController::class, 'updatePassword'])->name('password.update');
         Route::get('grupos/{grupo}', [DashboardController::class, 'showGrupo'])->name('grupos.show');
 
         // Downloads

@@ -17,6 +17,20 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
+@php
+    $appUrl = rtrim((string) config('app.url'), '/');
+    $parsedAppUrl = parse_url($appUrl);
+    $siteUrl = $appUrl;
+
+    if (is_array($parsedAppUrl) && isset($parsedAppUrl['scheme'], $parsedAppUrl['host'])) {
+        $siteUrl = $parsedAppUrl['scheme'] . '://' . $parsedAppUrl['host'];
+
+        if (isset($parsedAppUrl['port'])) {
+            $siteUrl .= ':' . $parsedAppUrl['port'];
+        }
+    }
+@endphp
+
 <body class="h-full overflow-x-hidden bg-[#171717] text-white font-sans antialiased">
     <div class="min-h-full flex">
         <!-- Sidebar Desktop -->
@@ -48,6 +62,23 @@
                                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         Histórico
+                    </a>
+                    <a href="{{ route('cliente.password.edit') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300
+                              {{ request()->routeIs('cliente.password.*')
+    ? 'bg-[#f2c700] text-black shadow-lg shadow-[#f2c700]/20'
+    : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 11c1.104 0 2-.896 2-2V7a2 2 0 10-4 0v2c0 1.104.896 2 2 2zm-7 9h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z" />
+                        </svg>
+                        Alterar Senha
+                    </a>
+                    <a href="{{ $siteUrl }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-300 transition-all duration-300 hover:bg-gray-700 hover:text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Voltar ao Site
                     </a>
                 </nav>
 
@@ -85,6 +116,10 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
+                        <a href="{{ $siteUrl }}"
+                            class="hidden rounded-md bg-gray-800 px-3 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-700 hover:text-white sm:block">
+                            Site
+                        </a>
                         <form method="POST" action="{{ route('cliente.logout') }}" class="hidden sm:block">
                             @csrf
                             <button type="submit"
@@ -153,6 +188,22 @@
                                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         Histórico
+                    </a>
+                    <a href="{{ route('cliente.password.edit') }}" class="flex items-center gap-3 rounded-lg px-4 py-3 text-gray-300 transition-colors hover:bg-gray-700 hover:text-white
+                              {{ request()->routeIs('cliente.password.*') ? 'bg-gray-700 text-white' : '' }}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 11c1.104 0 2-.896 2-2V7a2 2 0 10-4 0v2c0 1.104.896 2 2 2zm-7 9h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z" />
+                        </svg>
+                        Alterar Senha
+                    </a>
+                    <a href="{{ $siteUrl }}"
+                        class="flex items-center gap-3 rounded-lg px-4 py-3 text-gray-300 transition-colors hover:bg-gray-700 hover:text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Voltar ao Site
                     </a>
                 </div>
                 <div class="mt-auto border-t border-gray-800 pt-4">

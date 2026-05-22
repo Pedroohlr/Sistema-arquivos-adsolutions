@@ -640,8 +640,8 @@
                         } else {
                             cont.innerHTML = data.map(c =>
                                 `<div class="px-3 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer" onclick="selecionarCliente(${c.id}, '${c.nome.replace(/'/g, "\\'")} (${c.usuario})')">
-                                        ${c.nome} <span class="text-gray-400">@${c.usuario}</span>
-                                    </div>`
+                                            ${c.nome} <span class="text-gray-400">@${c.usuario}</span>
+                                        </div>`
                             ).join('');
                         }
                         if (hint) {
@@ -703,7 +703,8 @@
                                 autocomplete="off"
                                 class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]"
                                 placeholder="Nome ou usuário...">
-                            <p id="searchHint" class="mt-1 text-xs text-gray-400">Digite pelo menos 4 caracteres para buscar.</p>
+                            <p id="searchHint" class="mt-1 text-xs text-gray-400">Digite pelo menos 4 caracteres para
+                                buscar.</p>
                             <div id="searchResultados"
                                 class="mt-1 bg-[#171717] rounded-md ring-1 ring-gray-700 hidden max-h-40 overflow-y-auto">
                             </div>
