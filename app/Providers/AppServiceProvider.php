@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Cliente;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,5 +35,18 @@ class AppServiceProvider extends ServiceProvider
         if (is_string($scheme) && in_array($scheme, ['http', 'https'], true)) {
             URL::forceScheme($scheme);
         }
+
+        ResetPassword::createUrlUsing(function ($notifiable, string $token) {
+            if ($notifiable instanceof Cliente) {
+                return route('cliente.reset-password', [
+                    'token' => $token,
+                    'email' => $notifiable->getEmailForPasswordReset(),
+                ]);
+            }
+            return route('password.reset', [
+                'token' => $token,
+                'email' => $notifiable->getEmailForPasswordReset(),
+            ]);
+        });
     }
 }

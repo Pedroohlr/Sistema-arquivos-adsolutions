@@ -35,14 +35,14 @@ class UsuariosController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nome' => 'required|string|max:255',
-            'usuario' => 'required|string|max:255|unique:clientes,usuario',
+            'nome'     => 'required|string|max:255',
+            'email'    => 'required|email|max:255|unique:clientes,email',
             'password' => 'required|string|min:4',
         ]);
 
         Cliente::create([
-            'nome' => $request->nome,
-            'usuario' => $request->usuario,
+            'nome'     => $request->nome,
+            'email'    => $request->email,
             'password' => bcrypt($request->password),
         ]);
 
@@ -55,14 +55,14 @@ class UsuariosController extends Controller
     public function update(Request $request, Cliente $usuario)
     {
         $request->validate([
-            'nome' => 'required|string|max:255',
-            'usuario' => 'required|string|max:255|unique:clientes,usuario,' . $usuario->id,
+            'nome'     => 'required|string|max:255',
+            'email'    => 'required|email|max:255|unique:clientes,email,' . $usuario->id,
             'password' => 'nullable|string|min:4',
         ]);
 
         $data = [
-            'nome' => $request->nome,
-            'usuario' => $request->usuario,
+            'nome'  => $request->nome,
+            'email' => $request->email,
         ];
 
         if ($request->filled('password')) {
@@ -89,9 +89,9 @@ class UsuariosController extends Controller
     public function search(Request $request)
     {
         $clientes = Cliente::where('nome', 'like', '%' . $request->q . '%')
-            ->orWhere('usuario', 'like', '%' . $request->q . '%')
+            ->orWhere('email', 'like', '%' . $request->q . '%')
             ->limit(10)
-            ->get(['id', 'nome', 'usuario']);
+            ->get(['id', 'nome', 'email']);
 
         return response()->json($clientes);
     }

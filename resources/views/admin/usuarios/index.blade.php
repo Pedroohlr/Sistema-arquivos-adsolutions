@@ -65,7 +65,7 @@
                                 </div>
                                 <div class="min-w-0 flex-1">
                                     <div class="text-sm font-medium text-white">{{ $cliente->nome }}</div>
-                                    <div class="text-xs text-gray-400">{{ '@' . $cliente->usuario }}</div>
+                                    <div class="text-xs text-gray-400">{{ $cliente->email }}</div>
                                     <div class="mt-2 text-xs text-gray-500">Criado em {{ $cliente->created_at->format('d/m/Y') }}
                                     </div>
                                 </div>
@@ -90,7 +90,7 @@
                             </div>
                             <div class="flex flex-col gap-2 sm:flex-row">
                                 <button
-                                    onclick="editUsuario({{ $cliente->id }}, '{{ addslashes($cliente->nome) }}', '{{ addslashes($cliente->usuario) }}')"
+                                    onclick="editUsuario({{ $cliente->id }}, '{{ addslashes($cliente->nome) }}', '{{ addslashes($cliente->email ?? '') }}')"
                                     class="rounded-md bg-gray-800 px-3 py-2 text-sm text-[#f2c700] transition-colors hover:bg-gray-700 hover:text-[#d9b300]">
                                     Editar
                                 </button>
@@ -130,7 +130,7 @@
                                             </div>
                                             <div>
                                                 <div class="text-sm font-medium text-white">{{ $cliente->nome }}</div>
-                                                <div class="text-xs text-gray-400">{{ '@' . $cliente->usuario }}</div>
+                                                <div class="text-xs text-gray-400">{{ $cliente->email }}</div>
                                             </div>
                                         </div>
                                     </td>
@@ -156,7 +156,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-right">
                                         <div class="flex items-center justify-end gap-2">
                                             <button
-                                                onclick="editUsuario({{ $cliente->id }}, '{{ addslashes($cliente->nome) }}', '{{ addslashes($cliente->usuario) }}')"
+                                                onclick="editUsuario({{ $cliente->id }}, '{{ addslashes($cliente->nome) }}', '{{ addslashes($cliente->email ?? '') }}')"
                                                 class="text-xs text-[#f2c700] hover:text-[#d9b300] px-2 py-1 rounded hover:bg-gray-800 transition-colors">
                                                 Editar
                                             </button>
@@ -205,10 +205,10 @@
                             placeholder="Nome completo">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-white mb-1">Usuário</label>
-                        <input type="text" name="usuario" required autocomplete="off"
+                        <label class="block text-sm font-medium text-white mb-1">E-mail</label>
+                        <input type="email" name="email" required autocomplete="off"
                             class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]"
-                            placeholder="login único">
+                            placeholder="email@exemplo.com">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-white mb-1">Senha</label>
@@ -246,8 +246,8 @@
                             class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-white mb-1">Usuário</label>
-                        <input type="text" name="usuario" id="edit_usuario" required
+                        <label class="block text-sm font-medium text-white mb-1">E-mail</label>
+                        <input type="email" name="email" id="edit_email" required
                             class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]">
                     </div>
                     <div>
@@ -293,10 +293,10 @@
                 document.getElementById(id).classList.add('hidden');
                 document.body.style.overflow = '';
             }
-            function editUsuario(id, nome, usuario) {
+            function editUsuario(id, nome, email) {
                 document.getElementById('editUsuarioForm').action = usuarioUpdateUrl(id);
                 document.getElementById('edit_nome').value = nome;
-                document.getElementById('edit_usuario').value = usuario;
+                document.getElementById('edit_email').value = email;
                 document.getElementById('edit_password').value = '';
                 openModal('editUsuarioModal');
             }

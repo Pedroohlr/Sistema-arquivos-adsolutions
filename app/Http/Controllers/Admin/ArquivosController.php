@@ -141,14 +141,14 @@ class ArquivosController extends Controller
     public function criarClienteNaSubpasta(Request $request, Subpasta $subpasta)
     {
         $request->validate([
-            'nome' => 'required|string|max:255',
-            'usuario' => 'required|string|max:255|unique:clientes,usuario',
+            'nome'     => 'required|string|max:255',
+            'email'    => 'required|email|max:255|unique:clientes,email',
             'password' => 'required|string|min:4',
         ]);
 
         $cliente = Cliente::create([
-            'nome' => $request->nome,
-            'usuario' => $request->usuario,
+            'nome'     => $request->nome,
+            'email'    => $request->email,
             'password' => bcrypt($request->password),
         ]);
 

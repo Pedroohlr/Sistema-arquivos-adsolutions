@@ -2,20 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Cliente extends Authenticatable
+class Cliente extends Authenticatable implements CanResetPasswordContract
 {
-  use Notifiable;
+  use Notifiable, CanResetPassword;
 
   protected $table = 'clientes';
 
   protected $fillable = [
     'nome',
-    'usuario',
+    'email',
     'password',
   ];
 

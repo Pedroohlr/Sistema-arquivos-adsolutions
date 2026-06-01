@@ -102,7 +102,7 @@
                                     <div class="hidden sm:flex flex-wrap gap-1 ml-2">
                                         @foreach($subpasta->clientes as $c)
                                             <span
-                                                class="px-2 py-0.5 rounded text-xs bg-gray-800 text-[#f2c700]">{{ $c->usuario }}</span>
+                                                class="px-2 py-0.5 rounded text-xs bg-gray-800 text-[#f2c700]">{{ $c->email }}</span>
                                         @endforeach
                                         @if($subpasta->clientes->isEmpty())
                                             <span class="text-xs text-gray-600 italic">Sem usuário</span>
@@ -149,7 +149,7 @@
                                                 <path
                                                     d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                                             </svg>
-                                            {{ $c->nome }} <span class="text-gray-500">({{ $c->usuario }})</span>
+                                            {{ $c->nome }} <span class="text-gray-500">({{ $c->email }})</span>
                                             <form method="POST"
                                                 action="{{ route('admin.arquivos.subpastas.clientes.remove', [$subpasta, $c]) }}"
                                                 style="display:inline">
@@ -639,8 +639,8 @@
                             cont.innerHTML = '<div class="px-3 py-2 text-sm text-gray-500">Nenhum usuário encontrado</div>';
                         } else {
                             cont.innerHTML = data.map(c =>
-                                `<div class="px-3 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer" onclick="selecionarCliente(${c.id}, '${c.nome.replace(/'/g, "\\'")} (${c.usuario})')">
-                                            ${c.nome} <span class="text-gray-400">@${c.usuario}</span>
+                                `<div class="px-3 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer" onclick="selecionarCliente(${c.id}, '${c.nome.replace(/'/g, "\\'")} (${c.email})')">
+                                            ${c.nome} <span class="text-gray-400">${c.email}</span>
                                         </div>`
                             ).join('');
                         }
@@ -739,10 +739,10 @@
                                 placeholder="Nome completo">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-white mb-2">Usuário</label>
-                            <input type="text" name="usuario" required
+                            <label class="block text-sm font-medium text-white mb-2">E-mail</label>
+                            <input type="email" name="email" required
                                 class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]"
-                                placeholder="nome_usuario">
+                                placeholder="email@exemplo.com">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-white mb-2">Senha</label>

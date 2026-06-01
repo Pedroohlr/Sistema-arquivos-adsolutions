@@ -81,9 +81,9 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-white mb-2">Usuário</label>
-                <input type="text" name="usuario" value="{{ request('usuario') }}" 
-                       placeholder="Nome do usuário..."
+                <label class="block text-sm font-medium text-white mb-2">E-mail</label>
+                <input type="text" name="usuario" value="{{ request('usuario') }}"
+                       placeholder="email@exemplo.com..."
                        class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]">
             </div>
 

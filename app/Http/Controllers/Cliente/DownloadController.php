@@ -40,7 +40,7 @@ class DownloadController extends Controller
         Download::create([
             'arquivo_id' => $arquivo->id,
             'cliente_id' => $cliente->id,
-            'usuario' => $cliente->usuario,
+            'usuario' => $cliente->email,
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
             'downloaded_at' => now(),

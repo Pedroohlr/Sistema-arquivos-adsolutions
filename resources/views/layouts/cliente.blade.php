@@ -86,7 +86,7 @@
                 <div class="px-4 py-4 border-t border-gray-800">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-sm text-gray-300 truncate">Olá,
-                            {{ auth()->guard('cliente')->user()->usuario }}</span>
+                            {{ auth()->guard('cliente')->user()->email }}</span>
                     </div>
                     <form method="POST" action="{{ route('cliente.logout') }}">
                         @csrf
@@ -111,7 +111,7 @@
                         <img src="{{ asset('images/logo.webp') }}" alt="Logo" class="h-12 w-auto object-contain">
                         <div class="min-w-0">
                             <p class="truncate text-sm font-semibold text-white">Portal do Cliente</p>
-                            <p class="truncate text-xs text-gray-400">{{ auth()->guard('cliente')->user()->usuario }}
+                            <p class="truncate text-xs text-gray-400">{{ auth()->guard('cliente')->user()->email }}
                             </p>
                         </div>
                     </div>
@@ -207,7 +207,7 @@
                     </a>
                 </div>
                 <div class="mt-auto border-t border-gray-800 pt-4">
-                    <p class="px-4 py-2 text-sm text-gray-400">Olá, {{ auth()->guard('cliente')->user()->usuario }}</p>
+                    <p class="px-4 py-2 text-sm text-gray-400">Olá, {{ auth()->guard('cliente')->user()->email }}</p>
                     <form method="POST" action="{{ route('cliente.logout') }}">
                         @csrf
                         <button type="submit"
