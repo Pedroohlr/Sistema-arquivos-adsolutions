@@ -88,6 +88,21 @@ class WordPressMailer
         return $this->send($to, $subject, $body);
     }
 
+    public function enviarResetSenha(string $to, string $url): bool
+    {
+        $subject = 'Redefinição de senha – ADSolutions';
+        $body    = $this->template('Redefinição de senha', [
+            'Recebemos uma solicitação para redefinir a senha da sua conta no portal <strong>ADSolutions</strong>.',
+            'Clique no botão abaixo para criar uma nova senha. O link expira em <strong>60 minutos</strong>.',
+            'Se você não solicitou a redefinição, ignore este e-mail.',
+        ], [], [
+            'label' => 'Redefinir minha senha',
+            'url'   => $url,
+        ]);
+
+        return $this->send($to, $subject, $body);
+    }
+
     public function enviarSenhaAlterada(string $to, string $usuario): bool
     {
         $subject = 'Senha alterada com sucesso';

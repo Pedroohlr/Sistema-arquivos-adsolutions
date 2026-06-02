@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\WordPressMailer;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -47,5 +48,15 @@ class Cliente extends Authenticatable implements CanResetPasswordContract
   public function downloads(): HasMany
   {
     return $this->hasMany(Download::class);
+  }
+
+  public function sendPasswordResetNotification($token): void
+  {
+    $url = route('cliente.reset-password', [
+      'token' => $token,
+      'email' => $this->email,
+    ]);
+
+    app(WordPressMailer::class)->enviarResetSenha($this->email, $url);
   }
 }
