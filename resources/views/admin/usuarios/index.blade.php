@@ -191,8 +191,7 @@
 
     <!-- Modal: Criar Usuário -->
     <div id="createUsuarioModal"
-        class="hidden fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4"
-        onclick="closeModal('createUsuarioModal')">
+        class="hidden fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
         <div class="bg-[#1e1e1e] rounded-lg p-6 w-full max-w-md border border-gray-800" onclick="event.stopPropagation()">
             <h3 class="text-lg font-semibold text-white mb-4">Novo Usuário</h3>
             <form method="POST" action="{{ route('admin.usuarios.store') }}" autocomplete="off">

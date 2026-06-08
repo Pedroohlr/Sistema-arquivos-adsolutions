@@ -91,8 +91,15 @@ class UsuariosController extends Controller
         $clientes = Cliente::where('nome', 'like', '%' . $request->q . '%')
             ->orWhere('email', 'like', '%' . $request->q . '%')
             ->limit(10)
-            ->get(['id', 'nome', 'email']);
+            ->get(['id', 'nome', 'email'])
+            ->map(fn($c) => array_merge($c->toArray(), ['source' => 'cliente']));
 
-        return response()->json($clientes);
+        $admins = \App\Models\Admin::where('name', 'like', '%' . $request->q . '%')
+            ->orWhere('email', 'like', '%' . $request->q . '%')
+            ->limit(5)
+            ->get(['id', 'name as nome', 'email'])
+            ->map(fn($a) => array_merge($a->toArray(), ['source' => 'admin']));
+
+        return response()->json($clientes->merge($admins)->values());
     }
 }

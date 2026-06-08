@@ -135,6 +135,22 @@ class ArquivosController extends Controller
         return back()->with('success', 'Usuário adicionado à pasta com sucesso!');
     }
 
+    public function adicionarAdminComoCliente(Request $request, Subpasta $subpasta)
+    {
+        $request->validate(['admin_id' => 'required|exists:admins,id']);
+
+        $admin = \App\Models\Admin::findOrFail($request->admin_id);
+
+        $cliente = Cliente::firstOrCreate(
+            ['email' => $admin->email],
+            ['nome' => $admin->name, 'password' => bcrypt(\Illuminate\Support\Str::random(16))]
+        );
+
+        $subpasta->clientes()->syncWithoutDetaching([$cliente->id]);
+
+        return back()->with('success', 'Administrador vinculado à pasta com sucesso!');
+    }
+
     /**
      * Cria um novo cliente e já vincula a uma subpasta
      */

@@ -388,6 +388,10 @@
             return '{{ route('admin.arquivos.subpastas.clientes.create', '__ID__') }}'.replace('__ID__', id);
         }
 
+        function arquivosSubpastaClientesAddAdminUrl(id) {
+            return '{{ route('admin.arquivos.subpastas.clientes.add-admin', '__ID__') }}'.replace('__ID__', id);
+        }
+
         function usuariosSearchUrl() {
             return '{{ route('admin.usuarios.search') }}';
         }
@@ -568,13 +572,17 @@
         function openAddClienteModal(subpastaId) {
             _addClienteSubpastaId = subpastaId;
             document.getElementById('formAddExistente').action = arquivosSubpastaClientesAddUrl(subpastaId);
+            document.getElementById('formAddAdmin').action = arquivosSubpastaClientesAddAdminUrl(subpastaId);
             document.getElementById('formCriarCliente').action = arquivosSubpastaClientesCreateUrl(subpastaId);
             document.getElementById('searchClienteInput').value = '';
             document.getElementById('searchHint').textContent = 'Digite pelo menos 4 caracteres para buscar.';
             document.getElementById('searchResultados').classList.add('hidden');
             document.getElementById('searchResultados').innerHTML = '';
             document.getElementById('clienteSelecionadoId').value = '';
+            document.getElementById('clienteSelecionadoSource').value = 'cliente';
             document.getElementById('clienteSelecionado').classList.add('hidden');
+            document.getElementById('formAddExistente').classList.remove('hidden');
+            document.getElementById('formAddAdmin').classList.add('hidden');
             switchAddClienteTab('existente');
             const modal = document.getElementById('addClienteModal');
             modal.classList.remove('hidden');
@@ -639,9 +647,10 @@
                             cont.innerHTML = '<div class="px-3 py-2 text-sm text-gray-500">Nenhum usuário encontrado</div>';
                         } else {
                             cont.innerHTML = data.map(c =>
-                                `<div class="px-3 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer" onclick="selecionarCliente(${c.id}, '${c.nome.replace(/'/g, "\\'")} (${c.email})')">
-                                            ${c.nome} <span class="text-gray-400">${c.email}</span>
-                                        </div>`
+                                `<div class="px-3 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer flex items-center justify-between" onclick="selecionarCliente(${c.id}, '${c.nome.replace(/'/g, "\\'")} (${c.email})', '${c.source}')">
+                                    <span>${c.nome} <span class="text-gray-400">${c.email}</span></span>
+                                    ${c.source === 'admin' ? '<span class="ml-2 text-xs bg-[#f2c700] text-black px-1.5 py-0.5 rounded">Admin</span>' : ''}
+                                </div>`
                             ).join('');
                         }
                         if (hint) {
@@ -660,13 +669,22 @@
             }, 300);
         }
 
-        function selecionarCliente(id, texto) {
+        function selecionarCliente(id, texto, source) {
             document.getElementById('clienteSelecionadoId').value = id;
+            document.getElementById('clienteSelecionadoSource').value = source || 'cliente';
             document.getElementById('clienteSelecionadoTexto').textContent = '✓ ' + texto;
             document.getElementById('clienteSelecionado').classList.remove('hidden');
             document.getElementById('searchResultados').classList.add('hidden');
             document.getElementById('searchClienteInput').value = texto;
             document.getElementById('searchHint').textContent = 'Usuário selecionado.';
+
+            // Alterna o form de submit conforme o tipo
+            const isAdmin = source === 'admin';
+            document.getElementById('formAddExistente').classList.toggle('hidden', isAdmin);
+            document.getElementById('formAddAdmin').classList.toggle('hidden', !isAdmin);
+            if (isAdmin) {
+                document.getElementById('adminSelecionadoId').value = id;
+            }
         }
     </script>
 
@@ -694,27 +712,46 @@
 
             <!-- Tab: Existente -->
             <div id="tabContentExistente">
-                <form id="formAddExistente" method="POST" action="">
-                    @csrf
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-white mb-2">Buscar Usuário</label>
-                            <input type="text" id="searchClienteInput" oninput="searchClientes(this.value)"
-                                autocomplete="off"
-                                class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]"
-                                placeholder="Nome ou usuário...">
-                            <p id="searchHint" class="mt-1 text-xs text-gray-400">Digite pelo menos 4 caracteres para
-                                buscar.</p>
-                            <div id="searchResultados"
-                                class="mt-1 bg-[#171717] rounded-md ring-1 ring-gray-700 hidden max-h-40 overflow-y-auto">
-                            </div>
-                            <input type="hidden" name="cliente_id" id="clienteSelecionadoId">
-                            <div id="clienteSelecionado" class="mt-2 hidden">
-                                <span class="text-sm text-[#f2c700]" id="clienteSelecionadoTexto"></span>
-                            </div>
+                {{-- Campo de busca compartilhado entre os dois forms --}}
+                <div class="space-y-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-2">Buscar Usuário</label>
+                        <input type="text" id="searchClienteInput" oninput="searchClientes(this.value)"
+                            autocomplete="off"
+                            class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]"
+                            placeholder="Nome, e-mail ou usuário...">
+                        <p id="searchHint" class="mt-1 text-xs text-gray-400">Digite pelo menos 4 caracteres para buscar.</p>
+                        <div id="searchResultados"
+                            class="mt-1 bg-[#171717] rounded-md ring-1 ring-gray-700 hidden max-h-40 overflow-y-auto">
+                        </div>
+                        <input type="hidden" id="clienteSelecionadoSource" value="cliente">
+                        <div id="clienteSelecionado" class="mt-2 hidden">
+                            <span class="text-sm text-[#f2c700]" id="clienteSelecionadoTexto"></span>
                         </div>
                     </div>
-                    <div class="mt-6 flex gap-3">
+                </div>
+
+                {{-- Form para cliente existente --}}
+                <form id="formAddExistente" method="POST" action="">
+                    @csrf
+                    <input type="hidden" name="cliente_id" id="clienteSelecionadoId">
+                    <div class="mt-4 flex gap-3">
+                        <button type="button" onclick="closeAddClienteModal()"
+                            class="flex-1 rounded-md bg-gray-700 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-600 transition-colors">
+                            Cancelar
+                        </button>
+                        <button type="submit"
+                            class="flex-1 rounded-md bg-[#f2c700] px-4 py-2 text-sm font-semibold text-black hover:bg-[#d9b300] transition-all duration-300 transform hover:scale-105 active:scale-95">
+                            Adicionar
+                        </button>
+                    </div>
+                </form>
+
+                {{-- Form para admin (oculto até selecionar um admin) --}}
+                <form id="formAddAdmin" method="POST" action="" class="hidden">
+                    @csrf
+                    <input type="hidden" name="admin_id" id="adminSelecionadoId">
+                    <div class="mt-4 flex gap-3">
                         <button type="button" onclick="closeAddClienteModal()"
                             class="flex-1 rounded-md bg-gray-700 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-600 transition-colors">
                             Cancelar

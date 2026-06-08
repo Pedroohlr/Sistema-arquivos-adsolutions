@@ -75,6 +75,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::prefix('arquivos')->name('arquivos.')->group(function () {
             Route::post('subpastas/{subpasta}/clientes', [ArquivosController::class, 'adicionarClienteSubpasta'])->name('subpastas.clientes.add');
             Route::post('subpastas/{subpasta}/clientes/novo', [ArquivosController::class, 'criarClienteNaSubpasta'])->name('subpastas.clientes.create');
+            Route::post('subpastas/{subpasta}/clientes/admin', [ArquivosController::class, 'adicionarAdminComoCliente'])->name('subpastas.clientes.add-admin');
             Route::delete('subpastas/{subpasta}/clientes/{cliente}', [ArquivosController::class, 'removerClienteSubpasta'])->name('subpastas.clientes.remove');
         });
 
