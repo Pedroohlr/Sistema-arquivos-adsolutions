@@ -38,6 +38,12 @@ class AppServiceProvider extends ServiceProvider
                     'email' => $notifiable->getEmailForPasswordReset(),
                 ]);
             }
+            if ($notifiable instanceof \App\Models\Admin) {
+                return route('admin.reset-password', [
+                    'token' => $token,
+                    'email' => $notifiable->getEmailForPasswordReset(),
+                ]);
+            }
             return route('password.reset', [
                 'token' => $token,
                 'email' => $notifiable->getEmailForPasswordReset(),

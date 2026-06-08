@@ -246,7 +246,7 @@
                     <div>
                         <label class="block text-sm font-medium text-white mb-2">Arquivo</label>
                         <div class="mt-2 flex items-center justify-center w-full">
-                            <label
+                            <label id="dropZone"
                                 class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-700 border-dashed rounded-lg cursor-pointer bg-[#171717] hover:bg-[#1e1e1e] hover:border-[#f2c700] transition-all duration-300">
                                 <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                     <svg class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor"
@@ -258,7 +258,7 @@
                                             para upload</span> ou arraste e solte</p>
                                     <p class="text-xs text-gray-500">Múltiplos arquivos • Máx. 500MB cada</p>
                                 </div>
-                                <input type="file" name="arquivos[]" required multiple class="hidden"
+                                <input id="fileInput" type="file" name="arquivos[]" required multiple class="hidden"
                                     onchange="updateFileName(this)">
                                 <span id="fileName" class="text-sm text-gray-400 mt-2 block text-center pb-2"></span>
                             </label>
@@ -803,3 +803,45 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    (function () {
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        if (!dropZone || !fileInput) return;
+
+        ['dragenter', 'dragover'].forEach(event => {
+            dropZone.addEventListener(event, function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.add('border-[#f2c700]', 'bg-[#1e1e1e]');
+            });
+        });
+
+        ['dragleave', 'dragend'].forEach(event => {
+            dropZone.addEventListener(event, function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.remove('border-[#f2c700]', 'bg-[#1e1e1e]');
+            });
+        });
+
+        dropZone.addEventListener('drop', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.remove('border-[#f2c700]', 'bg-[#1e1e1e]');
+
+            const files = e.dataTransfer.files;
+            if (!files || files.length === 0) return;
+
+            // Transfere os arquivos para o input nativo
+            const dt = new DataTransfer();
+            Array.from(files).forEach(f => dt.items.add(f));
+            fileInput.files = dt.files;
+
+            updateFileName(fileInput);
+        });
+    })();
+</script>
+@endpush

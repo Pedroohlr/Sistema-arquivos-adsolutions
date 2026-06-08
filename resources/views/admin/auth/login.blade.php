@@ -68,7 +68,13 @@
                     </div>
                 </form>
 
-                <p class="mt-10 text-center text-sm text-gray-400">
+                <p class="mt-6 text-center text-sm text-gray-400">
+                    <a href="{{ route('admin.forgot-password') }}" class="font-semibold text-[#f2c700] hover:text-[#d9b300]">
+                        Esqueceu sua senha?
+                    </a>
+                </p>
+
+                <p class="mt-4 text-center text-sm text-gray-400">
                     <a href="{{ route('cliente.login') }}" class="font-semibold text-[#f2c700] hover:text-[#d9b300]">
                         Acessar como cliente
                     </a>

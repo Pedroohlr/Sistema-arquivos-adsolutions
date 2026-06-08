@@ -26,6 +26,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('guest.admin')->group(function () {
         Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login');
         Route::post('login', [AdminAuthController::class, 'login'])->name('login.post');
+        Route::get('esqueci-senha', [AdminAuthController::class, 'showForgotPasswordForm'])->name('forgot-password');
+        Route::post('esqueci-senha', [AdminAuthController::class, 'sendResetLink'])->name('forgot-password.send');
+        Route::get('redefinir/{token}', [AdminAuthController::class, 'showResetPasswordForm'])->name('reset-password');
+        Route::post('redefinir', [AdminAuthController::class, 'resetPassword'])->name('reset-password.update');
     });
 
     // Rotas protegidas do Admin
