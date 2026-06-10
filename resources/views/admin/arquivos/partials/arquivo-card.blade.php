@@ -36,6 +36,14 @@
         <!-- Botões de ação -->
         <div
             class="flex flex-shrink-0 gap-1 opacity-100 transition-all duration-300 sm:translate-x-2 sm:opacity-0 sm:group-hover:translate-x-0 sm:group-hover:opacity-100">
+            <a href="{{ route('admin.arquivos.arquivos.download', $arquivo->id) }}"
+                class="p-1.5 bg-gray-700 hover:bg-gray-600 rounded text-white transition-colors transform hover:scale-110"
+                title="Baixar arquivo">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+            </a>
             <button onclick="deleteArquivo({{ $arquivo->id }}, '{{ addslashes($arquivo->nome) }}')"
                 class="p-1.5 bg-red-900 hover:bg-red-800 rounded text-white transition-colors transform hover:scale-110"
                 title="Deletar arquivo">

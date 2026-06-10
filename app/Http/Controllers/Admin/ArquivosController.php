@@ -250,6 +250,14 @@ class ArquivosController extends Controller
     }
 
     /**
+     * Download de arquivo (admin tem acesso irrestrito)
+     */
+    public function downloadArquivo(Arquivo $arquivo)
+    {
+        return Storage::download($arquivo->caminho, $arquivo->nome_original);
+    }
+
+    /**
      * Deletar arquivo
      */
     public function destroyArquivo(Arquivo $arquivo)

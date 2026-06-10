@@ -19,7 +19,9 @@
         <div class="flex w-full items-center justify-center px-4 py-10 sm:px-6 md:w-1/2 md:px-8 md:py-12 lg:px-12">
             <div class="w-full max-w-md">
                 <div class="flex justify-center mb-8">
-                    <img src="{{ asset('images/logo.webp') }}" alt="Logo" class="h-20 w-auto object-contain sm:h-24">
+                    <a href="http://152.67.37.12/" target="_blank" rel="noopener">
+                        <img src="{{ asset('images/logo.webp') }}" alt="Logo" class="h-20 w-auto object-contain sm:h-24">
+                    </a>
                 </div>
                 <h2 class="text-center text-2xl font-bold leading-9 tracking-tight text-white mb-10">
                     Painel Administrativo

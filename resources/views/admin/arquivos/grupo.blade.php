@@ -427,8 +427,21 @@
         }
 
         function editSubpasta(id, nome) {
-            // Implementar modal de edição
-            alert('Editar subpasta: ' + nome + ' (ID: ' + id + ')');
+            document.getElementById('editSubpastaId').value = id;
+            document.getElementById('editSubpastaNome').value = nome;
+            document.getElementById('formEditSubpasta').action = arquivosSubpastaUpdateUrl(id);
+            const modal = document.getElementById('editSubpastaModal');
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => document.getElementById('editSubpastaNome').focus(), 50);
+        }
+
+        function closeEditSubpastaModal() {
+            const modal = document.getElementById('editSubpastaModal');
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
         }
 
         function closeUploadModal() {
@@ -687,6 +700,40 @@
             }
         }
     </script>
+
+    <!-- Modal: Editar Subpasta -->
+    <div id="editSubpastaModal" class="fixed inset-0 bg-black bg-opacity-75 z-50 items-center justify-center p-4 hidden"
+        style="display:none;" onclick="if(event.target === this) closeEditSubpastaModal();">
+        <div class="bg-[#1e1e1e] rounded-lg p-6 w-full max-w-md border border-gray-800" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-white">Editar Pasta</h3>
+                <button onclick="closeEditSubpastaModal()" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+            </div>
+            <form id="formEditSubpasta" method="POST" action="">
+                @csrf
+                @method('PUT')
+                <input type="hidden" id="editSubpastaId">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-2">Nome da Pasta</label>
+                        <input type="text" name="nome" id="editSubpastaNome" required
+                            class="w-full rounded-md border-0 bg-[#171717] py-2 px-3 text-white ring-1 ring-gray-700 focus:ring-2 focus:ring-[#f2c700]"
+                            placeholder="Nome da pasta">
+                    </div>
+                </div>
+                <div class="mt-6 flex gap-3">
+                    <button type="button" onclick="closeEditSubpastaModal()"
+                        class="flex-1 rounded-md bg-gray-700 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-600 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                        class="flex-1 rounded-md bg-[#f2c700] px-4 py-2 text-sm font-semibold text-black hover:bg-[#d9b300] transition-all duration-300 transform hover:scale-105 active:scale-95">
+                        Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Modal: Adicionar Cliente à Pasta -->
     <div id="addClienteModal" class="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4 hidden"
