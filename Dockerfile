@@ -40,6 +40,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY docker/php/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
 
 COPY . .
 COPY --from=vendor /app/vendor ./vendor
