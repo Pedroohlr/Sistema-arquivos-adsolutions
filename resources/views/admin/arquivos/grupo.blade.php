@@ -46,11 +46,7 @@
                 Arquivos do Grupo (visíveis para todos os clientes)
             </h2>
             @if($grupo->arquivos->count() > 0)
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    @foreach($grupo->arquivos as $arquivo)
-                        @include('admin.arquivos.partials.arquivo-card', ['arquivo' => $arquivo])
-                    @endforeach
-                </div>
+                @include('admin.arquivos.partials.arquivo-table', ['arquivos' => $grupo->arquivos])
             @else
                 <div class="bg-[#1e1e1e] rounded-lg border border-gray-800 border-dashed p-12 text-center animate-pulse">
                     <svg class="mx-auto h-16 w-16 text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -173,11 +169,7 @@
 
                                 {{-- Arquivos --}}
                                 @if($subpasta->arquivos->count() > 0)
-                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                        @foreach($subpasta->arquivos as $arquivo)
-                                            @include('admin.arquivos.partials.arquivo-card', ['arquivo' => $arquivo])
-                                        @endforeach
-                                    </div>
+                                    @include('admin.arquivos.partials.arquivo-table', ['arquivos' => $subpasta->arquivos])
                                 @else
                                     <div class="border border-gray-700 border-dashed rounded-lg p-8 text-center">
                                         <svg class="mx-auto h-10 w-10 text-gray-600 mb-3" fill="none" stroke="currentColor"
