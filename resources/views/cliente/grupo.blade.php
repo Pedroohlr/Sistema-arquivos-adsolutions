@@ -30,13 +30,7 @@
             </h2>
 
             @if($arquivosRaiz->count() > 0)
-                <div class="rounded-lg border border-gray-800 bg-bg-secondary overflow-hidden">
-                    <div class="divide-y divide-gray-800">
-                        @foreach($arquivosRaiz as $arquivo)
-                            @include('cliente.partials.arquivo-list-item', ['arquivo' => $arquivo])
-                        @endforeach
-                    </div>
-                </div>
+                @include('cliente.partials.arquivo-table', ['arquivos' => $arquivosRaiz])
             @else
                 <div class="rounded-lg border border-gray-800 border-dashed bg-bg-secondary p-8 text-center sm:p-12">
                     <div class="animate-pulse">
@@ -46,8 +40,7 @@
                         </svg>
                     </div>
                     <p class="text-gray-400 text-lg mb-2">Nenhum arquivo disponível no grupo</p>
-                    <p class="text-gray-500 text-sm">Os arquivos aparecerão aqui quando forem adicionados pelo administrador.
-                    </p>
+                    <p class="text-gray-500 text-sm">Os arquivos aparecerão aqui quando forem adicionados pelo administrador.</p>
                 </div>
             @endif
         </div>
@@ -64,13 +57,7 @@
                 </h2>
 
                 @if($subpasta->arquivos->count() > 0)
-                    <div class="rounded-lg border border-gray-800 bg-bg-secondary overflow-hidden">
-                        <div class="divide-y divide-gray-800">
-                            @foreach($subpasta->arquivos as $arquivo)
-                                @include('cliente.partials.arquivo-list-item', ['arquivo' => $arquivo])
-                            @endforeach
-                        </div>
-                    </div>
+                    @include('cliente.partials.arquivo-table', ['arquivos' => $subpasta->arquivos])
                 @else
                     <div class="rounded-lg border border-gray-800 border-dashed bg-bg-secondary p-8 text-center sm:p-12">
                         <div class="animate-pulse">
@@ -80,8 +67,7 @@
                             </svg>
                         </div>
                         <p class="text-gray-400 text-lg mb-2">Nenhum arquivo na pasta "{{ $subpasta->nome }}"</p>
-                        <p class="text-gray-500 text-sm">Os arquivos pessoais aparecerão aqui quando forem adicionados pelo
-                            administrador.</p>
+                        <p class="text-gray-500 text-sm">Os arquivos pessoais aparecerão aqui quando forem adicionados pelo administrador.</p>
                     </div>
                 @endif
             </div>
