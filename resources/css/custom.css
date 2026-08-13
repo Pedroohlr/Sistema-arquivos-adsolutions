@@ -1,5 +1,7 @@
 /* Animações customizadas e melhorias de UX */
 
+[x-cloak] { display: none !important; }
+
 /* Smooth scroll */
 html {
     scroll-behavior: smooth;

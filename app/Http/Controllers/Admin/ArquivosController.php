@@ -258,13 +258,54 @@ class ArquivosController extends Controller
     }
 
     /**
-     * Deletar arquivo
+     * Deletar arquivo (suporta JSON para chamadas AJAX)
      */
     public function destroyArquivo(Arquivo $arquivo)
     {
         Storage::delete($arquivo->caminho);
         $arquivo->delete();
 
+        if (request()->wantsJson()) {
+            return response()->json(['success' => true, 'mensagem' => 'Arquivo deletado com sucesso.']);
+        }
+
         return back()->with('success', 'Arquivo deletado com sucesso!');
+    }
+
+    /**
+     * Deletar múltiplos arquivos de uma vez (AJAX)
+     */
+    public function destroyBatch(Request $request)
+    {
+        $request->validate([
+            'ids'   => 'required|array|min:1',
+            'ids.*' => 'integer|exists:arquivos,id',
+        ]);
+
+        $deletadosIds = [];
+        $erros = [];
+
+        foreach ($request->ids as $id) {
+            try {
+                $arquivo = Arquivo::findOrFail($id);
+                Storage::delete($arquivo->caminho);
+                $arquivo->delete();
+                $deletadosIds[] = (int) $id;
+            } catch (\Exception $e) {
+                $erros[] = "Falha ao deletar arquivo #{$id}.";
+            }
+        }
+
+        $total = count($deletadosIds);
+
+        return response()->json([
+            'success'       => $total > 0,
+            'deletados'     => $total,
+            'deletados_ids' => $deletadosIds,
+            'erros'         => $erros,
+            'mensagem'      => $total === 1
+                ? '1 arquivo deletado com sucesso.'
+                : "{$total} arquivo(s) deletado(s) com sucesso.",
+        ]);
     }
 }

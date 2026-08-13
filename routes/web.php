@@ -56,6 +56,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('upload', [ArquivosController::class, 'uploadArquivo'])->name('upload');
             Route::get('arquivos/{arquivo}/download', [ArquivosController::class, 'downloadArquivo'])->name('arquivos.download');
             Route::put('arquivos/{arquivo}/mover', [ArquivosController::class, 'moverArquivo'])->name('arquivos.mover');
+            Route::delete('arquivos/batch', [ArquivosController::class, 'destroyBatch'])->name('arquivos.destroy-batch');
             Route::delete('arquivos/{arquivo}', [ArquivosController::class, 'destroyArquivo'])->name('arquivos.destroy');
         });
 
